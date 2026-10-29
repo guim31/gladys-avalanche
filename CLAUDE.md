@@ -31,16 +31,22 @@ pushing.
 ## Architecture
 
 ```
-index.js                          SDK wiring only: handlers registered before connect()
-src/devices/index.js              registry of the device blueprints + dispatch helpers
-src/devices/<type>.js             one device type per file (buildDevice, onPoll, onSetValue...)
-src/scenes.js                     scene action handlers (manifest `scene_actions`)
+index.js                          SDK wiring only: src/app.js registers the handlers before connect()
+src/app.js                        every SDK handler -> the monitor (also used by the tests)
+src/monitor.js                    30-minute cycle, states, scene triggers, connection status
+src/source.js                     data.gouv.fr archive (directory index, XML, PDF) and DPBRA API
+src/bra.js                        reads a bulletin (XML) -> plain object
+src/massifs.js                    the 35 massifs: number, name, archive file names, snow altitude
+src/devices.js                    one device per massif, its features and states
 src/widgets.js                    dashboard widget handlers (manifest `widgets`)
+src/messages.js                   texts in en/fr/de/es (levels, aspects, statuses)
+src/time.js                       French local dates of the bulletins
 src/config.js                     DEFAULT_CONFIG (mirrors the manifest defaults) + normalization
-src/weather.js                    example driver (Open-Meteo)
-gladys-assistant-integration.json manifest: name, config_schema, actions, image...
-docs/en.md, docs/fr.md            user documentation, re-hosted by Gladys (mandatory)
-test/                             node --test, against the SDK's fake Gladys (integration-sdk/testing)
+src/store.js                      /data/avalanche.json (last bulletin per massif, trigger reference)
+gladys-assistant-integration.json manifest: name, config_schema, triggers, widget...
+docs/{en,fr,de,es}.md             user documentation, re-hosted by Gladys
+test/                             node --test, against the SDK's fake Gladys; real bulletins in
+                                  test/fixtures/bra/ under the paths of the archive
 .github/scripts/release.mjs       release helpers (manifest bump, changelog), tested in test/
 ```
 
@@ -250,3 +256,26 @@ long, et sur un « Sie »/« Ihr… » de politesse en allemand. Le store exige 
 - Docs `en`, `fr`, `de`, `es` avec les mêmes sections.
 - Chauffe, ouverture, sécurité : ne rien rendre pilotable « comme un thermostat » ou par un assistant
   vocal quand une erreur serait dangereuse (leçon d'OctoPrint).
+
+## Bulletins d'avalanche (gladys-avalanche)
+
+- **Source** : archive ouverte de Météo-France sur data.gouv.fr,
+  `https://files.data.gouv.fr/meteofrance/data/BULLETIN/BRA/AAAA/MM/JJ/{xml,pdf}/` (index HTML, fichiers
+  redirigés en 302 vers un stockage objet OVH). Un fichier par massif et par émission (`Oisans_20260210171500.xml`),
+  parfois deux le même jour : prendre l'horodatage le plus récent. Le répertoire est la date **d'émission** (vers 16 h,
+  pour le lendemain jusqu'à 18 h). Tout l'historique 2022-2026 a été re-téléversé le 01/07/2026 : le **délai de mise
+  en ligne en saison n'a pas pu être mesuré** (développement fin octobre). D'où l'option clé d'API DPBRA
+  (`public-api.meteofrance.fr/public/DPBRA/v1/massif/BRA?id-massif=N&format=xml`, en-tête `apikey`), non testée.
+- **Noms de fichiers instables** : « Embrunnais Parpaillon » (11/2025) devenu « Embrunais Parpaillon » (02/2026) ;
+  les PDF sont en majuscules à tirets (`ASPE-OSSAU_…pdf`). Comparaison normalisée (`nameKey`) et alias dans
+  `src/massifs.js` ; l'`ID` du XML est vérifié après téléchargement. Andorre (71) est dans le GeoJSON des massifs mais
+  n'a jamais de bulletin.
+- **Dates** : heure locale française sans décalage ; conversion explicite Europe/Paris (`src/time.js`), indépendante
+  de `TZ`.
+- `EVOLURISQUE1/2` : niveau atteint plus tard dans la journée ; le niveau d'une zone est le plus haut des deux.
+  `RISQUE2` vide = pas d'altitude limite.
+- **`risk/integer` du front ne connaît que 0 à 3** (pas de risque, faible, moyen, élevé) : 4 et 5 s'afficheraient
+  « inconnu ». L'échelle européenne 1-5 est publiée en `counter-sensor/integer`.
+- Les hauteurs de neige du bulletin sont à 1000/1500/2000 m (Préalpes, Corse, Pays basque) ou 1500/2000/2500 m :
+  altitude de référence figée par massif (`snowAltitude`), elle entre dans le nom des fonctionnalités.
+- Hors bulletin en vigueur, seul `in_force` (0) est publié : pas de battement de cœur sur des valeurs périmées.
