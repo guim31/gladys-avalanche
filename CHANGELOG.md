@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-29
+
 ### Added
 
 - Météo-France avalanche bulletins (BERA) for the 35 massifs of the Alps, the
@@ -25,3 +27,6 @@ the notes of the version's GitHub Release.
   one with the forecaster's comment and a link to the PDF of the bulletin.
 - Optional Météo-France API key (DPBRA API) in case the archive lags behind.
 - Documentation in English, French, German and Spanish.
+
+[Unreleased]: https://github.com/guim31/gladys-avalanche/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/guim31/gladys-avalanche/releases/tag/v1.0.0
