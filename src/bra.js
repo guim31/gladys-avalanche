@@ -119,10 +119,17 @@ export function parseBulletin(xml) {
   }
 
   const risk = attributesOf(xml, 'RISQUE') ?? {};
-  const below = zoneLevel(risk.RISQUE1, risk.EVOLURISQUE1);
+  let below = zoneLevel(risk.RISQUE1, risk.EVOLURISQUE1);
   const aboveLevel = zoneLevel(risk.RISQUE2, risk.EVOLURISQUE2);
-  const split = aboveLevel === null ? null : whole(risk.ALTITUDE);
-  const above = split === null ? below : aboveLevel;
+  let split = aboveLevel === null ? null : whole(risk.ALTITUDE);
+  let above = aboveLevel ?? below;
+  if (aboveLevel !== null && split === null) {
+    // Two levels without a readable altitude: the higher one for the whole
+    // massif, never the lower one.
+    below = Math.max(below ?? 0, aboveLevel);
+    above = below;
+    split = null;
+  }
   const declaredMax = level(risk.RISQUEMAXI);
   const max =
     declaredMax ?? (below === null && above === null ? null : Math.max(below ?? 0, above ?? 0));

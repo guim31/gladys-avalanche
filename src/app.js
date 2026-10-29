@@ -48,8 +48,10 @@ export function registerHandlers(gladys, options = {}) {
         await monitor.resync(config);
         return;
       }
-      started = true;
+      // Marked started only once it succeeded: a failed start (Gladys still
+      // booting) is tried again at the next connection, timer included.
       await monitor.start(config);
+      started = true;
     } catch (err) {
       logger.error('Initialization failed', err);
       await gladys.setConnectionStatus(false, STATUS.initFailed).catch(() => {});

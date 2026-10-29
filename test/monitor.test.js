@@ -389,3 +389,90 @@ test('the paths of the fixtures are the paths of the archive', () => {
     join(fixturePath(`${ARCHIVE_BASE}/2026/02/10/xml/`), '..', 'Aspe Ossau_20260210162700.xml'),
   );
 });
+
+test('a failed start is tried again at the next connection', async (t) => {
+  const { createFakeGladys } = await import('@gladysassistant/integration-sdk/testing');
+  const { registerHandlers } = await import('../src/app.js');
+  const { Store } = await import('../src/store.js');
+  const { mkdtemp, rm } = await import('node:fs/promises');
+  const { tmpdir } = await import('node:os');
+  const dir = await mkdtemp(join(tmpdir(), 'gladys-avalanche-'));
+  const gladys = createFakeGladys({ config: { massifs: ['8'] } });
+  const app = registerHandlers(gladys, {
+    store: new Store(dir),
+    fetch: fixtureFetch(),
+    timers: false,
+    now: () => FEB_10_EVENING,
+  });
+  t.after(async () => {
+    await app.stop();
+    await rm(dir, { recursive: true, force: true });
+  });
+  let fail = true;
+  const original = gladys.publishDiscoveredDevices.bind(gladys);
+  t.mock.method(gladys, 'publishDiscoveredDevices', async (devices) => {
+    if (fail) {
+      throw new Error('Gladys still starting');
+    }
+    return original(devices);
+  });
+  await gladys.connect();
+  assert.equal(gladys.fake.connectionStatus.connected, false);
+  fail = false;
+  await gladys.disconnect();
+  await gladys.connect();
+  assert.equal(gladys.fake.discoveredDevices.length, 1);
+  assert.equal(app.monitor.bulletin(8).riskMax, 4);
+  assert.equal(gladys.fake.connectionStatus.connected, true);
+});
+
+test('a configuration change during a cycle is read right after it', async () => {
+  const world = await createWorld({ config: { massifs: ['8'] } });
+  try {
+    const running = world.monitor.runCycle();
+    await world.fake.configUpdated({ massifs: ['8', '65'] });
+    await running;
+    assert.equal(world.monitor.bulletin(65).riskMax, 4);
+  } finally {
+    await world.cleanup();
+  }
+});
+
+test('the API path: an unchanged bulletin writes nothing, missing values are left out of events', async (t) => {
+  const xmls = [
+    await xmlOf('2025/11/03/xml/Belledonne_20251103151800.xml'),
+    await xmlOf('2026/02/10/xml/Belledonne_20260210162000.xml'),
+  ];
+  let index = 0;
+  const fetch = fixtureFetch({
+    overrides: [[(url) => url.startsWith(DPBRA_URL), () => response(200, xmls[index])]],
+  });
+  const world = await createWorld({
+    created: [8],
+    config: { massifs: ['8'], api_key: 'k' },
+    fetch,
+  });
+  try {
+    const saves = t.mock.method(world.monitor.store, 'save');
+    await world.monitor.runCycle();
+    assert.equal(saves.mock.callCount(), 0);
+    index = 1;
+    await world.monitor.runCycle();
+    const issued = world.fake.sceneEvents.find((e) => e.key === TRIGGERS.BULLETIN_ISSUED);
+    assert.ok(issued);
+    assert.equal('pdf_url' in issued.data, false);
+    assert.ok(Object.values(issued.data).every((value) => value !== null));
+  } finally {
+    await world.cleanup();
+  }
+});
+
+test('a device whose massif left the configuration is no longer published', async () => {
+  const world = await createWorld({ created: [8, 3], config: { massifs: ['8'] } });
+  try {
+    assert.deepEqual(world.monitor.created(), [8]);
+    assert.equal(world.fake.lastState(ids(world.gladys, 3).in_force), undefined);
+  } finally {
+    await world.cleanup();
+  }
+});

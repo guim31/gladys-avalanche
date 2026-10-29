@@ -146,3 +146,10 @@ test('the index gives the newest file of each massif, with its full address', as
   assert.equal(found.get(15).day, '2026/02/10');
   assert.match(found.get(15).url, /Oisans_20260210171500\.xml$/);
 });
+
+test('two levels without a readable altitude: the higher one for the whole massif', () => {
+  const b =
+    parseBulletin(`<BULLETINS_NEIGE_AVALANCHE ID="8" DATEBULLETIN="2026-02-10T16:00:00" DATEVALIDITE="2026-02-11T18:00:00">
+<RISQUE RISQUE1="2" ALTITUDE="" RISQUE2="3" RISQUEMAXI="3"/></BULLETINS_NEIGE_AVALANCHE>`);
+  assert.deepEqual([b.riskBelow, b.riskAbove, b.splitAltitude], [3, 3, null]);
+});

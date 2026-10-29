@@ -84,7 +84,7 @@ export class Monitor {
     await this.publishDiscovered();
     await this.publishStates(this.created());
     await this.runCycle();
-    if (this.timers) {
+    if (this.timers && !this.cycleTimer) {
       this.cycleTimer = setInterval(() => this.runCycle(), REFRESH_MINUTES * MINUTE);
       this.cycleTimer.unref?.();
     }
@@ -116,6 +116,8 @@ export class Monitor {
       this.gladys.forgetPublishedStates();
     }
     await this.publishDiscovered();
+    // A cycle in progress still uses the old configuration: one more after it.
+    await this.running;
     await this.runCycle();
     this.refreshWidget();
   }
@@ -132,7 +134,8 @@ export class Monitor {
     const codes = [];
     for (const device of this.gladys.devices ?? []) {
       const code = codeOfExternalId(this.gladys, device.external_id);
-      if (code !== null && !codes.includes(code)) {
+      // A device of a massif removed from the configuration is no longer read.
+      if (code !== null && !codes.includes(code) && this.config.codes.includes(code)) {
         codes.push(code);
       }
     }
@@ -270,8 +273,11 @@ export class Monitor {
       return; // an older issue (the API can lag behind the archive): kept the newest
     }
     const isNew = !previous || bulletin.issuedAt > previous.issuedAt;
+    const entry = this.entries[code];
+    if (isNew || entry.url !== url || entry.pdfUrl !== pdfUrl) {
+      changed.push(code); // the API path reads the same bulletin every cycle
+    }
     this.entries[code] = { bulletin, url, pdfUrl };
-    changed.push(code);
     if (!isNew) {
       return;
     }
@@ -309,7 +315,9 @@ export class Monitor {
         pdf_url: pdfUrl,
       },
     ]);
-    for (const [key, data] of events) {
+    for (const [key, raw] of events) {
+      // A missing value is left out rather than sent as null.
+      const data = Object.fromEntries(Object.entries(raw).filter(([, value]) => value !== null));
       try {
         await this.gladys.publishSceneEvent(key, data);
       } catch (err) {
