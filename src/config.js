@@ -1,45 +1,43 @@
 // -----------------------------------------------------------------------------
-// Integration configuration.
-//
-// The configuration is filled in by the user in Gladys, from the `config_schema`
-// declared in `gladys-assistant-integration.json`. The SDK fetches it for you
-// (`gladys.getConfig()`) and notifies you of every change through
-// `gladys.onConfigUpdated()`.
-//
-// This module only provides defaults and normalizes the received object, so the
-// rest of the code never has to deal with `undefined`.
+// Integration configuration: defaults (they mirror the `default` values of the
+// manifest `config_schema`, see test/manifest.test.js) and normalization, so
+// the rest of the code never deals with strings, blanks or `undefined`.
 // -----------------------------------------------------------------------------
 
-// Defaults: they MUST stay consistent with the `default` values declared in the
-// `config_schema` of the manifest.
+import { massifOf } from './massifs.js';
+
+export const LANGUAGES = ['en', 'fr', 'de', 'es'];
+
+// A bulletin is issued once a day (around 16:00, sometimes re-issued): every
+// 30 minutes is enough to see it within half an hour, and keeps the archive
+// and the API far below any limit (DPBRA: 50 requests per minute).
+export const REFRESH_MINUTES = 30;
+
 export const DEFAULT_CONFIG = {
-  latitude: 48.8566, // Paris
-  longitude: 2.3522,
-  unit: 'celsius', // 'celsius' | 'fahrenheit'
-  // Seconds between two reads of the polled sensors. Gladys polls at most once
-  // a minute: slower intervals are applied by skipping polls (see
-  // createPoller in src/devices/index.js).
-  poll_frequency: 300,
-  // Reserved key (NOT in config_schema): because the manifest declares both
-  // 'local' and 'cloud' in its `transports` field, Gladys shows a standard
-  // "Prefer the local connection" toggle and sends the user's choice here.
-  // Read-only for the integration; defaults to true.
-  GLADYS_PREFER_LOCAL: true,
+  massifs: [],
+  api_key: '',
+  language: 'fr',
 };
 
 /**
- * Merge the user config with the defaults.
- * @param {Record<string, unknown>} raw config returned by the SDK
+ * @param {object} raw configuration from Gladys
+ * @returns {{codes: number[], apiKey: string, language: string}}
  */
 export function normalizeConfig(raw = {}) {
-  return {
-    ...DEFAULT_CONFIG,
-    ...raw,
-    // Force the types: config may arrive as strings from a form.
-    latitude: Number(raw.latitude ?? DEFAULT_CONFIG.latitude),
-    longitude: Number(raw.longitude ?? DEFAULT_CONFIG.longitude),
-    poll_frequency: Number(raw.poll_frequency ?? DEFAULT_CONFIG.poll_frequency),
-    // The preference is a boolean; anything but an explicit false means true.
-    GLADYS_PREFER_LOCAL: raw.GLADYS_PREFER_LOCAL !== false,
-  };
+  const config = { ...DEFAULT_CONFIG, ...(raw ?? {}) };
+  let values = config.massifs;
+  if (typeof values === 'string') {
+    // A value typed by hand, or stored by an older form: "8, 15".
+    values = values.split(/[\s,;]+/);
+  }
+  const codes = [];
+  for (const value of Array.isArray(values) ? values : []) {
+    const massif = massifOf(String(value).trim());
+    if (massif && !codes.includes(massif.code)) {
+      codes.push(massif.code);
+    }
+  }
+  const apiKey = typeof config.api_key === 'string' ? config.api_key.trim() : '';
+  const language = LANGUAGES.includes(config.language) ? config.language : DEFAULT_CONFIG.language;
+  return { codes, apiKey, language };
 }

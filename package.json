@@ -1,8 +1,8 @@
 {
-  "name": "gladys-integration-template-js",
+  "name": "gladys-avalanche",
   "version": "1.0.0",
   "private": true,
-  "description": "Official starter template to build an external integration for Gladys Assistant with the JavaScript SDK.",
+  "description": "Météo-France avalanche bulletins (BERA) for Gladys Assistant: danger level per massif, triggers and widget.",
   "type": "module",
   "main": "index.js",
   "scripts": {
