@@ -18,6 +18,8 @@
 // Country, 1500/2000/2500 m elsewhere): the snow depth features read that one.
 // -----------------------------------------------------------------------------
 
+import { usZoneOf } from './us-zones.js';
+
 export const MOUNTAINS = {
   northern_alps: {
     en: 'Northern Alps',
@@ -85,6 +87,17 @@ const BY_CODE = new Map(MASSIFS.map((massif) => [massif.code, massif]));
 export function massifOf(code) {
   return BY_CODE.get(Number(code)) ?? null;
 }
+
+/**
+ * A followed zone: a Météo-France massif (numeric code) or a US forecast zone
+ * ("us-<id>", see us-zones.js, which has a `center`); null if unknown.
+ */
+export function zoneOf(code) {
+  return usZoneOf(code) ?? massifOf(code);
+}
+
+/** True for a US forecast zone. */
+export const isUsZone = (zone) => Boolean(zone?.center);
 
 /**
  * Comparison key of a massif file name: lower case, no accent, letters and

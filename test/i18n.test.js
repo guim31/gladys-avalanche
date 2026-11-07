@@ -129,8 +129,8 @@ test('every text of the manifest is in English, French, German and Spanish', () 
 });
 
 test('every message table of the code has the four languages', () => {
-  const long = new Set(['empty', 'offSeason', 'gone']);
-  const captions = new Set(['source', 'issued']);
+  const long = new Set(['empty', 'offSeason', 'offSeasonUs', 'gone']);
+  const captions = new Set(['readFull', 'issuedBy']);
   const found = [
     ...Object.entries(STATUS).flatMap(([key, value]) =>
       problems(value, `STATUS.${key}`, MAX.message),

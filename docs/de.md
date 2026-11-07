@@ -1,4 +1,4 @@
-# Lawinenberichte (BERA)
+# Lawinenberichte
 
 Der Lawinenlagebericht (BERA) von Météo-France in Gladys, für die 35 französischen Massive der Alpen, der Pyrenäen und
 Korsikas: ein Gerät pro Massiv, mit Gefahrenstufe von 1 bis 5, Tendenz für den Folgetag, gefährlichsten Expositionen
@@ -8,6 +8,8 @@ und Schneehöhe. Dazu Szenenauslöser und ein Dashboard-Widget.
 > Bericht noch den Text des Vorhersagers noch deine eigene Beurteilung im Gelände.
 
 Nicht mit Météo-France verbunden.
+
+**Neu in 1.1: die Lawinenzentren der USA.** Siehe [US-Lawinenzentren](#us-lawinenzentren).
 
 ## Was du bekommst
 
@@ -34,11 +36,11 @@ Nicht mit Météo-France verbunden.
 
 ### Einstellungen
 
-| Einstellung                    | Standard    | Wirkung                                                                |
-| ------------------------------ | ----------- | ---------------------------------------------------------------------- |
-| Massive                        | keines      | Die zu verfolgenden Massive, je ein Gerät.                             |
-| API-Schlüssel von Météo-France | leer        | Optional: liest die Berichte über die DPBRA-API statt über das Archiv. |
-| Sprache der Funktionsnamen     | Französisch | Namen der Funktionen neuer Geräte, Sprache ihrer Texte und Variablen.  |
+| Einstellung                    | Standard    | Wirkung                                                                 |
+| ------------------------------ | ----------- | ----------------------------------------------------------------------- |
+| Massive und Zonen              | keines      | Die zu verfolgenden Massive (Frankreich) und Zonen (USA), je ein Gerät. |
+| API-Schlüssel von Météo-France | leer        | Optional: liest die Berichte über die DPBRA-API statt über das Archiv.  |
+| Sprache der Funktionsnamen     | Französisch | Namen der Funktionen neuer Geräte, Sprache ihrer Texte und Variablen.   |
 
 Speichere, öffne dann den Tab **Entdecken** der Integration und lege die gewünschten Geräte an.
 
@@ -50,6 +52,25 @@ kostenloses Konto im [API-Portal von Météo-France](https://portail-api.meteofr
 Konfiguration ein. Die Integration fragt dann direkt bei Météo-France, eine Anfrage pro Massiv alle 30 Minuten.
 Dieser Weg wurde nach der API-Dokumentation entwickelt, ohne Schlüssel: Rückmeldungen willkommen. Den Link zum PDF
 des Berichts gibt es nur mit dem Archiv.
+
+## US-Lawinenzentren
+
+Die **Vorhersagezonen der US-Lawinenzentren** (83 Zonen in 12 Bundesstaaten: Alaska, Utah, Washington, Montana,
+Wyoming, Idaho, Kalifornien…) stehen in derselben Liste, nach den französischen Massiven, als „Bundesstaat · Zentrum
+· Zone“, zum Beispiel „Utah · UAC · Salt Lake“. Jede wird ein Gerät mit der Gefahrenstufe des Tages und des
+Folgetags (die nordamerikanische Skala hat dieselben fünf Stufen), den gefährlichsten Expositionen, dem
+Erstellungsdatum, dem Ende der Gültigkeit und „Bericht gültig“. Ein Zentrum gibt weder Höhengrenze noch Schneehöhe an:
+Diese Funktionen fehlen, nie 0. Das Widget zeigt die Stufen unter, an und über der Waldgrenze, die „Bottom Line“ des
+Zentrums (auf Englisch) und eine Schaltfläche zur **offiziellen Vorhersage der Zone** auf der Website des Zentrums.
+Die Szenenauslöser funktionieren genauso.
+
+- **Die US-Zentren veröffentlichen nur in ihrer Saison** (etwa von November bis April, jedes Zentrum mit eigenen
+  Daten). Außerhalb der Saison oder an einem Tag ohne Gefahrenstufe zeigt das Gerät nur „kein gültiger Bericht“, und
+  das Widget verweist auf die Vorhersage des Zentrums.
+- Nicht angeboten: das **Colorado Avalanche Information Center** (CAIC), dessen Zonen während der Saison neu
+  gezeichnet werden und keinen festen Namen haben.
+- Die Vorhersagen kommen aus der öffentlichen API von [avalanche.org](https://avalanche.org/), ohne Konto, eine
+  Anfrage pro Zone alle 30 Minuten. Nicht mit avalanche.org oder den Zentren verbunden.
 
 ## Geräte
 
@@ -102,6 +123,8 @@ Der allererste nach der Installation gelesene Bericht setzt nur die Referenz: Er
   Massivs nur, wenn ein neuer erscheint.
 - Optionale DPBRA-API von Météo-France: eine Anfrage pro Massiv alle 30 Minuten, weit unter den 50 Anfragen pro
   Minute des Portals.
+- US-Vorhersagen: öffentliche API von [avalanche.org](https://avalanche.org/) (National Avalanche Center und
+  US-Lawinenzentren), eine Anfrage pro Zone alle 30 Minuten.
 
 ## Fehlerbehebung
 
@@ -118,3 +141,6 @@ Der allererste nach der Installation gelesene Bericht setzt nur die Referenz: Er
   Archivs mitten in der Saison ist noch nicht gemessen. Rückmeldungen willkommen.
 - Nur eine Zusammenfassung des Berichts: Die Texte zur Schneedecke, zum Wetter und zur Schneequalität bleiben im PDF.
 - Andorra ist nicht abgedeckt: Météo-France veröffentlicht dafür keinen Bericht.
+- US-Zonen: ganz am Anfang der Saison entwickelt, mit wenigen bewerteten Zonen; gegen die echte API getestet,
+  aber Rückmeldungen sind willkommen. Eine ohne neues Erstellungsdatum korrigierte Vorhersage wird erst mit der
+  nächsten gelesen.

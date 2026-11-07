@@ -10,6 +10,21 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+### Added
+
+- US avalanche centers: 83 forecast zones of avalanche.org (Alaska, Utah,
+  Washington, Montana, Wyoming, Idaho, California…) in the same list as the
+  French massifs, one device each with the danger of the day and of the next
+  day, the most exposed aspects and the dates; same triggers and widget (bands
+  below, near and above treeline, link to the official forecast). Only rated
+  forecasts are published: the US centers rate in season only. The Colorado
+  center (CAIC) is not offered.
+
+### Changed
+
+- Name "Avalanche bulletins" and descriptions widened to the US zones; the
+  French massif devices, their ids and settings are unchanged.
+
 ## [1.0.0] - 2026-10-29
 
 ### Added

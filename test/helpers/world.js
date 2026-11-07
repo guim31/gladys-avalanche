@@ -10,6 +10,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createFakeGladys } from '@gladysassistant/integration-sdk/testing';
 import { registerHandlers } from '../../src/app.js';
+import { massifIds } from '../../src/devices.js';
 import { ARCHIVE_BASE } from '../../src/source.js';
 import { Store } from '../../src/store.js';
 
@@ -58,7 +59,7 @@ export function fixtureFetch({ overrides = [], calls = [] } = {}) {
  * Starts the integration against the fake Gladys.
  * @param {object} [options]
  * @param {object} [options.config] integration configuration
- * @param {number[]} [options.created] massif codes whose device the user created
+ * @param {Array<number|string>} [options.created] massif (or US zone) codes whose device the user created
  * @param {Function} [options.fetch]
  * @param {object} [options.clock] { now } mutable clock
  * @param {string} [options.dataDir] reuse a /data directory (restart)
@@ -74,7 +75,7 @@ export async function createWorld({
   const gladys = createFakeGladys({ config });
   gladys.fake.devices = created.map((code) => ({
     name: `Device ${code}`,
-    external_id: gladys.externalIds('massif', String(code)).device,
+    external_id: massifIds(gladys, code).device,
     features: [],
   }));
   const app = registerHandlers(gladys, {

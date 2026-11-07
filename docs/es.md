@@ -1,4 +1,4 @@
-# Boletines de aludes (BERA)
+# Boletines de aludes
 
 El boletín de estimación del riesgo de aludes (BERA) de Météo-France en Gladys, para los 35 macizos franceses de los
 Alpes, los Pirineos y Córcega: un dispositivo por macizo, con su nivel de riesgo de 1 a 5, la tendencia del día
@@ -8,6 +8,8 @@ siguiente, las orientaciones más expuestas y el espesor de nieve. Incluye dispa
 > texto del predictor, ni su propia evaluación sobre el terreno.
 
 Sin afiliación con Météo-France.
+
+**Novedad en 1.1: los centros de aludes de Estados Unidos.** Vea [Centros de aludes de EE. UU.](#centros-de-aludes-de-ee-uu).
 
 ## Lo que obtiene
 
@@ -36,7 +38,7 @@ Sin afiliación con Météo-France.
 
 | Ajuste                                 | Por defecto | Función                                                                                |
 | -------------------------------------- | ----------- | -------------------------------------------------------------------------------------- |
-| Macizos                                | ninguno     | Los macizos que se siguen, un dispositivo cada uno.                                    |
+| Macizos y zonas                        | ninguno     | Los macizos (Francia) y zonas (EE. UU.) que se siguen, un dispositivo cada uno.        |
 | Clave de API de Météo-France           | vacía       | Opcional: lee los boletines por la API DPBRA en lugar del archivo.                     |
 | Idioma de los nombres de las funciones | francés     | Nombres de las funciones de los nuevos dispositivos, idioma de sus textos y variables. |
 
@@ -50,6 +52,25 @@ una cuenta gratuita en el [portal de API de Météo-France](https://portail-api.
 integración consulta entonces directamente a Météo-France, una petición por macizo cada 30 minutos. Esta vía se
 desarrolló a partir de la documentación de la API, sin clave: sus comentarios son bienvenidos. El enlace al PDF del
 boletín solo existe con el archivo.
+
+## Centros de aludes de EE. UU.
+
+Las **zonas de previsión de los centros de aludes de Estados Unidos** (83 zonas en 12 estados: Alaska, Utah,
+Washington, Montana, Wyoming, Idaho, California…) están en la misma lista, después de los macizos franceses, como
+«Estado · centro · zona», por ejemplo «Utah · UAC · Salt Lake». Cada una se convierte en un dispositivo con el nivel
+de peligro del día y del día siguiente (la escala norteamericana tiene los mismos cinco niveles), las orientaciones
+más expuestas, la fecha de emisión, el fin de validez y «boletín vigente». Un centro no da altitud límite ni espesor
+de nieve: esas funciones no existen, nunca valen 0. El widget muestra los niveles bajo, cerca y sobre el límite del
+bosque, el «bottom line» del centro (en inglés) y un botón hacia la **previsión oficial de la zona** en el sitio del
+centro. Los disparadores de escena funcionan igual.
+
+- **Los centros de EE. UU. solo publican en temporada** (aproximadamente de noviembre a abril, cada centro con sus
+  fechas). Fuera de temporada, o un día sin nivel de peligro, el dispositivo solo indica «ningún boletín vigente», y
+  el widget remite a la previsión del centro.
+- No disponible: el **Colorado Avalanche Information Center** (CAIC), cuyas zonas se redibujan durante la temporada y
+  no tienen un nombre estable.
+- Las previsiones vienen de la API pública de [avalanche.org](https://avalanche.org/), sin cuenta, una solicitud por
+  zona cada 30 minutos. Sin afiliación con avalanche.org ni con los centros.
 
 ## Dispositivos
 
@@ -101,6 +122,8 @@ El primerísimo boletín leído tras la instalación solo fija la referencia: no
   macizo solo cuando aparece uno nuevo.
 - API DPBRA de Météo-France, opcional: una petición por macizo cada 30 minutos, muy por debajo de las 50 peticiones
   por minuto del portal.
+- Previsiones de EE. UU.: API pública de [avalanche.org](https://avalanche.org/) (National Avalanche Center y
+  centros de aludes de EE. UU.), una solicitud por zona cada 30 minutos.
 
 ## Solución de problemas
 
@@ -118,3 +141,6 @@ El primerísimo boletín leído tras la instalación solo fija la referencia: no
 - Solo un resumen del boletín: los textos sobre el manto de nieve, la meteorología y la calidad de la nieve siguen en
   el PDF.
 - Andorra no está cubierta: Météo-France no publica boletín para ella.
+- Zonas de EE. UU.: desarrolladas al comienzo de la temporada, con pocas zonas evaluadas; probadas con la API
+  real, pero sus comentarios son bienvenidos. Una previsión corregida sin nueva fecha de emisión solo se lee en la
+  siguiente emisión.

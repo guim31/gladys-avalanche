@@ -11,6 +11,7 @@ import { SCENE_TRIGGER_KEYS, THRESHOLDS } from '../src/monitor.js';
 import { WIDGETS } from '../src/widgets.js';
 import { DEFAULT_CONFIG } from '../src/config.js';
 import { MASSIFS } from '../src/massifs.js';
+import { US_ZONES } from '../src/us-zones.js';
 
 const SCENE_ACTIONS = {};
 
@@ -62,7 +63,7 @@ test('the integration declares no manifest action', () => {
 });
 
 test('a regional service declares its country, which requires Gladys >= 5.3.0', () => {
-  assert.deepEqual(manifest.countries, ['FR']);
+  assert.deepEqual(manifest.countries, ['FR', 'US']);
   assert.ok(isAtLeast(minGladysVersion(), COUNTRIES_MIN_GLADYS_VERSION));
 });
 
@@ -70,11 +71,11 @@ test('public data only: cloud transport', () => {
   assert.deepEqual(manifest.transports, ['cloud']);
 });
 
-test('the massif list of the configuration is the massif table of the code', () => {
+test('the list of the configuration is the massif table, then the US zone table', () => {
   const field = manifest.config_schema.find((f) => f.key === 'massifs');
   assert.deepEqual(
     field.options.map((o) => o.value),
-    MASSIFS.map((m) => String(m.code)),
+    [...MASSIFS.map((m) => String(m.code)), ...US_ZONES.map((z) => z.code)],
   );
 });
 

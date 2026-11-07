@@ -1,4 +1,4 @@
-# Avalanche bulletins (BERA)
+# Avalanche bulletins
 
 The avalanche danger bulletin (BERA) of Météo-France in Gladys, for the 35 French massifs of the Alps, the Pyrenees
 and Corsica: one device per massif, with its danger level from 1 to 5, the trend for the next day, the most exposed
@@ -8,6 +8,8 @@ aspects and the snow depth. Scene triggers and a dashboard widget come with it.
 > bulletin, the forecaster's text, nor your own assessment in the field.
 
 Not affiliated with Météo-France.
+
+**New in 1.1: the avalanche centers of the United States.** See [US avalanche centers](#us-avalanche-centers).
 
 ## What you get
 
@@ -36,7 +38,7 @@ Not affiliated with Météo-France.
 
 | Setting                       | Default | What it does                                                                     |
 | ----------------------------- | ------- | -------------------------------------------------------------------------------- |
-| Massifs                       | none    | The massifs to follow, one device each.                                          |
+| Massifs and zones             | none    | The massifs (France) and zones (US) to follow, one device each.                  |
 | Météo-France API key          | empty   | Optional: reads the bulletins from the DPBRA API instead of the archive.         |
 | Language of the feature names | French  | Names of the features of new devices, and language of their texts and variables. |
 
@@ -50,6 +52,24 @@ the "Bulletin d'estimation du risque d'avalanche" (DPBRA) API, generate an **API
 configuration. The integration then asks Météo-France directly, one request per massif every 30 minutes. This path
 was developed from the API documentation, without a key: feedback welcome. The link to the PDF of the bulletin is
 only available from the archive.
+
+## US avalanche centers
+
+The **forecast zones of the US avalanche centers** (83 zones in 12 states: Alaska, Utah, Washington, Montana,
+Wyoming, Idaho, California…) are in the same list, after the French massifs, as "State · center · zone", for
+example "Utah · UAC · Salt Lake". Each becomes a device with the danger level of the day and of the next day (the
+North American scale has the same five levels), the most exposed aspects, the date of issue, the end of validity
+and "bulletin in force". A center gives no split altitude and no snow depth: those features are absent, never 0.
+The widget shows the levels below, near and above treeline, the center's "bottom line" (in English) and a button to
+the **official forecast of the zone** on the center's site. The scene triggers work the same way.
+
+- **The US centers publish only during their season** (roughly from November to April, each center its own dates).
+  Off season, or on a day without a danger rating, the device only says "no bulletin in force", and the widget
+  links to the center's forecast.
+- Not offered: the **Colorado Avalanche Information Center** (CAIC), whose zones are redrawn during the season and
+  have no stable name.
+- The forecasts come from the public API of [avalanche.org](https://avalanche.org/), without an account, one
+  request per zone every 30 minutes. Not affiliated with avalanche.org nor with the centers.
 
 ## Devices
 
@@ -100,6 +120,8 @@ The very first bulletin read after the installation only sets the reference: it 
   only when a new one appears.
 - Optional DPBRA API of Météo-France: one request per massif every 30 minutes, far below the 50 requests per minute
   of the portal.
+- US forecasts: public API of [avalanche.org](https://avalanche.org/) (National Avalanche Center and the US
+  avalanche centers), one request per zone every 30 minutes.
 
 ## Troubleshooting
 
@@ -115,3 +137,5 @@ The very first bulletin read after the installation only sets the reference: it 
   delay of the archive during the season is not measured yet. Feedback welcome.
 - A summary of the bulletin only: the texts on the snowpack, the weather and the snow quality stay in the PDF.
 - Andorra is not covered: Météo-France publishes no bulletin for it.
+- US zones: developed at the very start of the season, with few rated zones; tested against the real API, but
+  feedback welcome. A forecast corrected without a new date of issue is read at the next issue only.

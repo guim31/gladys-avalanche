@@ -4,7 +4,7 @@
 // the rest of the code never deals with strings, blanks or `undefined`.
 // -----------------------------------------------------------------------------
 
-import { massifOf } from './massifs.js';
+import { zoneOf } from './massifs.js';
 
 export const LANGUAGES = ['en', 'fr', 'de', 'es'];
 
@@ -21,7 +21,7 @@ export const DEFAULT_CONFIG = {
 
 /**
  * @param {object} raw configuration from Gladys
- * @returns {{codes: number[], apiKey: string, language: string}}
+ * @returns {{codes: Array<number|string>, apiKey: string, language: string}}
  */
 export function normalizeConfig(raw = {}) {
   const config = { ...DEFAULT_CONFIG, ...(raw ?? {}) };
@@ -32,9 +32,9 @@ export function normalizeConfig(raw = {}) {
   }
   const codes = [];
   for (const value of Array.isArray(values) ? values : []) {
-    const massif = massifOf(String(value).trim());
-    if (massif && !codes.includes(massif.code)) {
-      codes.push(massif.code);
+    const zone = zoneOf(String(value).trim());
+    if (zone && !codes.includes(zone.code)) {
+      codes.push(zone.code);
     }
   }
   const apiKey = typeof config.api_key === 'string' ? config.api_key.trim() : '';

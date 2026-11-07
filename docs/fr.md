@@ -1,4 +1,4 @@
-# Bulletins d'avalanche (BERA)
+# Bulletins d'avalanche
 
 Le bulletin d'estimation du risque d'avalanche (BERA) de Météo-France dans Gladys, pour les 35 massifs français des
 Alpes, des Pyrénées et de la Corse : un appareil par massif, avec son niveau de risque de 1 à 5, la tendance du
@@ -9,6 +9,8 @@ bord.
 > bulletin, ni le texte du prévisionniste, ni votre propre évaluation sur le terrain.
 
 Non affiliée à Météo-France.
+
+**Nouveau en 1.1 : les centres d'avalanche des États-Unis.** Voir [Centres d'avalanche américains](#centres-davalanche-américains).
 
 ## Ce que vous obtenez
 
@@ -37,7 +39,7 @@ Non affiliée à Météo-France.
 
 | Réglage                            | Défaut   | Rôle                                                                                  |
 | ---------------------------------- | -------- | ------------------------------------------------------------------------------------- |
-| Massifs                            | aucun    | Les massifs à suivre, un appareil chacun.                                             |
+| Massifs et zones                   | aucun    | Les massifs (France) et zones (USA) à suivre, un appareil chacun.                     |
 | Clé d'API Météo-France             | vide     | Facultative : lit les bulletins par l'API DPBRA plutôt que par l'archive.             |
 | Langue des noms de fonctionnalités | français | Noms des fonctionnalités des nouveaux appareils, langue de leurs textes et variables. |
 
@@ -51,6 +53,25 @@ un compte gratuit sur le [portail d'API de Météo-France](https://portail-api.m
 configuration. L'intégration interroge alors Météo-France directement, une requête par massif toutes les 30 minutes.
 Ce chemin a été développé d'après la documentation de l'API, sans clé : vos retours sont les bienvenus. Le lien vers
 le PDF du bulletin n'existe qu'avec l'archive.
+
+## Centres d'avalanche américains
+
+Les **zones de prévision des centres d'avalanche des États-Unis** (83 zones dans 12 États : Alaska, Utah, Washington,
+Montana, Wyoming, Idaho, Californie…) sont dans la même liste, après les massifs français, sous la forme « État ·
+centre · zone », par exemple « Utah · UAC · Salt Lake ». Chacune devient un appareil avec le niveau de risque du jour
+et du lendemain (l'échelle nord-américaine a les mêmes cinq niveaux), les pentes les plus exposées, la date
+d'émission, la fin de validité et « bulletin en vigueur ». Un centre ne donne ni altitude limite ni enneigement : ces
+fonctionnalités sont absentes, jamais à 0. Le widget montre les niveaux sous, vers et au-dessus de la limite
+forestière, le « bottom line » du centre (en anglais) et un bouton vers la **prévision officielle de la zone** sur le
+site du centre. Les déclencheurs de scène fonctionnent de la même façon.
+
+- **Les centres américains ne publient qu'en saison** (en gros de novembre à avril, chaque centre à ses dates). Hors
+  saison, ou un jour sans niveau de danger, l'appareil indique seulement « pas de bulletin en vigueur », et le widget
+  renvoie à la prévision du centre.
+- Non proposé : le **Colorado Avalanche Information Center** (CAIC), dont les zones sont redessinées en cours de
+  saison et n'ont pas de nom stable.
+- Les prévisions viennent de l'API publique d'[avalanche.org](https://avalanche.org/), sans compte, une requête par
+  zone toutes les 30 minutes. Non affiliée à avalanche.org ni aux centres.
 
 ## Appareils
 
@@ -101,6 +122,8 @@ Le tout premier bulletin lu après l'installation ne fait que poser la référen
   massif seulement quand un nouveau paraît.
 - API DPBRA de Météo-France, facultative : une requête par massif toutes les 30 minutes, très loin des 50 requêtes
   par minute du portail.
+- Prévisions américaines : API publique d'[avalanche.org](https://avalanche.org/) (National Avalanche Center et
+  centres d'avalanche américains), une requête par zone toutes les 30 minutes.
 
 ## Dépannage
 
@@ -118,3 +141,6 @@ Le tout premier bulletin lu après l'installation ne fait que poser la référen
 - Un résumé du bulletin seulement : les textes sur le manteau neigeux, la météo et la qualité de la neige restent
   dans le PDF.
 - L'Andorre n'est pas couverte : Météo-France ne publie pas de bulletin pour elle.
+- Zones américaines : développées en tout début de saison, avec peu de zones notées ; testées contre la vraie API,
+  mais vos retours sont les bienvenus. Une prévision corrigée sans nouvelle date d'émission n'est lue qu'à l'émission
+  suivante.
