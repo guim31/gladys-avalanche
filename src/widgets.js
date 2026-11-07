@@ -12,12 +12,17 @@
 //
 // Both end with the source and a reminder to read the whole bulletin. Budget:
 // 2 tiles, 2 texts, 1 status, 1 button.
+//
+// A US zone (avalanche.org) shows the same tiles, its three elevation bands
+// instead of the split altitude, no snow depth, the center's "bottom line" as
+// the comment (in English) and a button to the zone's forecast on the center's
+// site, also shown off season.
 // -----------------------------------------------------------------------------
 
 import { WIDGET_COLORS } from '@gladysassistant/integration-sdk';
 import { codeOfExternalId } from './devices.js';
 import { snowAt } from './bra.js';
-import { massifOf } from './massifs.js';
+import { isUsZone, massifOf, zoneOf } from './massifs.js';
 import { LEVEL_NAMES, aspectsText, levelText } from './messages.js';
 import { WIDGET_KEY } from './monitor.js';
 import { formatDateTime } from './time.js';
@@ -45,6 +50,12 @@ export const TEXT = {
     fr: 'Aucun bulletin en vigueur. Météo-France les émet de début novembre à début juin.',
     de: 'Kein gültiger Bericht. Météo-France gibt sie von Anfang November bis Anfang Juni heraus.',
     es: 'Ningún boletín vigente. Météo-France los emite de principios de noviembre a principios de junio.',
+  },
+  offSeasonUs: {
+    en: 'No danger rating in force. US centers rate only during their season: see their forecast.',
+    fr: 'Aucun niveau de danger en vigueur. Les centres américains ne notent qu’en saison : voir leur prévision.',
+    de: 'Keine gültige Gefahrenstufe. US-Zentren bewerten nur in ihrer Saison: Sieh dir ihre Vorhersage an.',
+    es: 'Ningún nivel de peligro vigente. Los centros de EE. UU. solo evalúan en temporada: consulte su previsión.',
   },
   alert: {
     en: 'Avalanche danger: ',
@@ -92,17 +103,41 @@ export const TEXT = {
     es: 'Nieve N / S a {altitude} m',
   },
   validUntil: { en: 'Valid until', fr: "Valable jusqu'au", de: 'Gültig bis', es: 'Válido hasta' },
-  source: {
-    en: 'Météo-France · read the full bulletin before going out',
-    fr: 'Météo-France · lisez le bulletin complet avant de partir',
-    de: 'Météo-France · lies vor der Tour den ganzen Bericht',
-    es: 'Météo-France · lea el boletín completo antes de salir',
+  readFull: {
+    en: 'read the full bulletin before going out',
+    fr: 'lisez le bulletin complet avant de partir',
+    de: 'lies vor der Tour den ganzen Bericht',
+    es: 'lea el boletín completo antes de salir',
   },
-  issued: {
-    en: 'Météo-France, issued {date}',
-    fr: 'Météo-France, émis le {date}',
-    de: 'Météo-France, erstellt am {date}',
-    es: 'Météo-France, emitido el {date}',
+  upper: {
+    en: 'Above treeline',
+    fr: 'Au-dessus de la forêt',
+    de: 'Über der Waldgrenze',
+    es: 'Sobre el límite del bosque',
+  },
+  middle: {
+    en: 'Near treeline',
+    fr: 'Limite forestière',
+    de: 'An der Waldgrenze',
+    es: 'Cerca del límite del bosque',
+  },
+  lower: {
+    en: 'Below treeline',
+    fr: 'Sous la limite forestière',
+    de: 'Unter der Waldgrenze',
+    es: 'Bajo el límite del bosque',
+  },
+  issuedBy: {
+    en: '{source}, issued {date}',
+    fr: '{source}, émis le {date}',
+    de: '{source}, erstellt am {date}',
+    es: '{source}, emitido el {date}',
+  },
+  forecast: {
+    en: 'Official forecast',
+    fr: 'Prévision officielle',
+    de: 'Offizielle Vorhersage',
+    es: 'Previsión oficial',
   },
   pdf: {
     en: 'Full bulletin',
@@ -165,17 +200,43 @@ function overview(monitor, codes, language, now) {
       icon: bulletin ? 'alert-triangle' : 'clock',
     })),
   });
-  components.push({ type: 'text', variant: 'caption', text: t(TEXT.source, language) });
+  // "Météo-France · avalanche.org · read the full bulletin before going out".
+  const sources = [
+    ...new Set(rows.map(({ code }) => (isUsZone(zoneOf(code)) ? 'avalanche.org' : 'Météo-France'))),
+  ].sort((a, b) => b.localeCompare(a));
+  components.push({
+    type: 'text',
+    variant: 'caption',
+    text: [...sources, t(TEXT.readFull, language)].join(' · '),
+  });
   return components;
 }
 
 const fill = (text, values) =>
   Object.entries(values).reduce((out, [key, value]) => out.replace(`{${key}}`, value), text);
 
+function forecastButton(zone, language) {
+  return {
+    type: 'button',
+    label: t(TEXT.forecast, language),
+    icon: 'external-link',
+    style: 'secondary',
+    link: { url: zone.link },
+  };
+}
+
 function detail(monitor, code, language, now, settings) {
   const bulletin = monitor.bulletin(code);
+  const place = zoneOf(code);
+  const us = isUsZone(place);
   if (!inForce(bulletin, now)) {
-    return [{ type: 'text', variant: 'body', text: t(TEXT.offSeason, language) }];
+    const components = [
+      { type: 'text', variant: 'body', text: t(us ? TEXT.offSeasonUs : TEXT.offSeason, language) },
+    ];
+    if (us && settings.show_pdf !== false) {
+      components.push(forecastButton(place, language));
+    }
+    return components;
   }
   const components = [];
   if (bulletin.riskMax !== null) {
@@ -212,7 +273,11 @@ function detail(monitor, code, language, now, settings) {
       });
     }
   };
-  if (bulletin.splitAltitude === null) {
+  if (us) {
+    for (const band of ['upper', 'middle', 'lower']) {
+      zone(t(TEXT[band], language), bulletin.bands?.[band] ?? null);
+    }
+  } else if (bulletin.splitAltitude === null) {
     zone(t(TEXT.wholeMassif, language), bulletin.riskBelow);
   } else {
     const altitude = String(bulletin.splitAltitude);
@@ -226,7 +291,7 @@ function detail(monitor, code, language, now, settings) {
     color: WIDGET_COLORS.NEUTRAL,
   });
   const massif = massifOf(code);
-  const snow = snowAt(bulletin, massif.snowAltitude);
+  const snow = massif ? snowAt(bulletin, massif.snowAltitude) : null;
   if (snow && snow.north !== null && snow.south !== null) {
     items.push({
       label: fill(t(TEXT.snow, language), { altitude: String(massif.snowAltitude) }),
@@ -245,10 +310,15 @@ function detail(monitor, code, language, now, settings) {
   components.push({
     type: 'text',
     variant: 'caption',
-    text: fill(t(TEXT.issued, language), { date: formatDateTime(bulletin.issuedAt, language) }),
+    text: fill(t(TEXT.issuedBy, language), {
+      source: us ? place.center : 'Météo-France',
+      date: formatDateTime(bulletin.issuedAt, language),
+    }),
   });
   const pdfUrl = monitor.pdfUrl(code);
-  if (settings.show_pdf !== false && pdfUrl) {
+  if (us && settings.show_pdf !== false) {
+    components.push(forecastButton(place, language));
+  } else if (settings.show_pdf !== false && pdfUrl) {
     components.push({
       type: 'button',
       label: t(TEXT.pdf, language),

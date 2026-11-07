@@ -36,8 +36,10 @@ src/app.js                        every SDK handler -> the monitor (also used by
 src/monitor.js                    30-minute cycle, states, scene triggers, connection status
 src/source.js                     data.gouv.fr archive (directory index, XML, PDF) and DPBRA API
 src/bra.js                        reads a bulletin (XML) -> plain object
-src/massifs.js                    the 35 massifs: number, name, archive file names, snow altitude
-src/devices.js                    one device per massif, its features and states
+src/massifs.js                    the 35 massifs: number, name, archive file names, snow altitude; zoneOf()
+src/us-zones.js                   the 83 US forecast zones (avalanche.org id, center, state, link)
+src/us.js                         avalanche.org product API -> a bulletin of the same shape as bra.js
+src/devices.js                    one device per massif (or US zone, type us_zone), features, states
 src/widgets.js                    dashboard widget handlers (manifest `widgets`)
 src/messages.js                   texts in en/fr/de/es (levels, aspects, statuses)
 src/time.js                       French local dates of the bulletins
@@ -280,3 +282,14 @@ long, et sur un « Sie »/« Ihr… » de politesse en allemand. Le store exige 
 - Les hauteurs de neige du bulletin sont à 1000/1500/2000 m (Préalpes, Corse, Pays basque) ou 1500/2000/2500 m :
   altitude de référence figée par massif (`snowAltitude`), elle entre dans le nom des fonctionnalités.
 - Hors bulletin en vigueur, seul `in_force` (0) est publié : pas de battement de cœur sur des valeurs périmées.
+- **Centres américains (1.1, 07/11/2026)** : API publique sans clé
+  `api.avalanche.org/v2/public/product?type=forecast&center_id=UAC&zone_id=1738` (un produit par zone ; JSON), liste des zones dans `products/map-layer` (GeoJSON de
+  ~330 Ko, géométries comprises : lu une fois pour écrire `src/us-zones.js`, jamais par le conteneur). Dates en UTC
+  avec décalage. `danger` : bandes `lower`/`middle`/`upper` (sous, vers, au-dessus de la limite forestière) pour
+  `current` et `tomorrow` ; -1 et 0 = « no rating ». `product_type` `summary` hors saison ou en avant-saison (danger
+  vide) ; zone inconnue = 200 avec tout à null. Seul un `forecast` noté devient un bulletin.
+- **CAIC (Colorado) exclu** : ses zones du map-layer s'appellent toutes « CAIC zone » et sont redessinées en saison
+  (5 polygones le 07/11, dizaines de sous-zones « Elk Mountains » dans `forecast_zone`) : pas de choix stable.
+- Appareil US = type d'identifiant `us_zone` (identifiant de zone avalanche.org), clé de config `us-<id>` : aucune
+  collision avec les numéros de massif, identifiants BERA inchangés. Seulement 6 fonctionnalités (ni altitude
+  limite, ni neige). Le lien du widget remplace le PDF (réglage `show_pdf` réutilisé).

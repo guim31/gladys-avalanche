@@ -43,6 +43,12 @@ export const STATUS = {
     de: 'Die Lawinenberichte von Météo-France sind gerade nicht lesbar. Neuer Versuch alle 30 Minuten.',
     es: 'Los boletines de Météo-France no se pueden leer por ahora. Nuevo intento cada 30 minutos.',
   },
+  usDown: {
+    en: 'The avalanche.org forecasts cannot be read for now. Retrying every 30 minutes.',
+    fr: "Les prévisions d'avalanche.org sont illisibles pour le moment. Nouvel essai toutes les 30 minutes.",
+    de: 'Die Vorhersagen von avalanche.org sind gerade nicht lesbar. Neuer Versuch alle 30 Minuten.',
+    es: 'Las previsiones de avalanche.org no se pueden leer por ahora. Nuevo intento cada 30 minutos.',
+  },
   keyRefused: {
     en: 'Météo-France refused the API key: check it in the configuration, or leave it empty to use the open archive.',
     fr: "Météo-France refuse la clé d'API : vérifiez-la dans la configuration, ou videz-la pour utiliser l'archive ouverte.",

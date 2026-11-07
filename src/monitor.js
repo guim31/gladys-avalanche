@@ -5,7 +5,8 @@
 //
 // Cycle: the archive index of today (then of the days before) gives the newest
 // file of each massif; a file already read is not downloaded again. With an
-// API key, the DPBRA API is asked for each massif instead.
+// API key, the DPBRA API is asked for each massif instead. A US zone is read
+// from avalanche.org (src/us.js), one request per zone.
 //
 // States: `publishChangedStates` sends only what changed, plus a heartbeat
 // every 12 hours (Gladys shows "no recent value" after 48 hours). Everything
@@ -27,10 +28,11 @@ import { createLogger } from '@gladysassistant/integration-sdk';
 import { BulletinError, parseBulletin } from './bra.js';
 import { REFRESH_MINUTES } from './config.js';
 import { buildDevice, codeOfExternalId, deviceStates, massifIds } from './devices.js';
-import { massifOf } from './massifs.js';
+import { isUsZone, zoneOf } from './massifs.js';
 import { LEVEL_NAMES, STATUS } from './messages.js';
 import { fetchFromApi, findArchiveFiles, findArchivePdfs, getText, SourceError } from './source.js';
 import { formatDateTime } from './time.js';
+import { fetchUsForecast } from './us.js';
 
 const logger = createLogger({ name: 'avalanche-monitor' });
 
@@ -66,7 +68,7 @@ export class Monitor {
     this.entries = {};
     this.lastCycleAt = null;
     this.running = null;
-    this.failing = null; // null, 'source' or 'key'
+    this.failing = null; // null, 'source', 'key' or 'us'
     this.statusPublished = false;
     this.cycleTimer = null;
     this.refreshTimer = null;
@@ -77,7 +79,7 @@ export class Monitor {
     this.config = config;
     const saved = await this.store.load();
     for (const [code, entry] of Object.entries(saved.massifs ?? {})) {
-      if (massifOf(code) && entry?.bulletin) {
+      if (zoneOf(code) && entry?.bulletin) {
         this.entries[code] = entry;
       }
     }
@@ -150,7 +152,7 @@ export class Monitor {
   deviceName(code) {
     const { device } = massifIds(this.gladys, code);
     const found = (this.gladys.devices ?? []).find((d) => d.external_id === device);
-    return found?.name || massifOf(code).name;
+    return found?.name || zoneOf(code).name;
   }
 
   bulletin(code) {
@@ -176,13 +178,18 @@ export class Monitor {
   async cycle() {
     const now = this.now();
     this.lastCycleAt = now;
-    const codes = this.config.codes;
+    const codes = this.config.codes.filter((code) => !isUsZone(zoneOf(code)));
+    const usCodes = this.config.codes.filter((code) => isUsZone(zoneOf(code)));
     let failure = null;
     const changed = [];
     if (codes.length > 0) {
       failure = this.config.apiKey
         ? await this.readFromApi(codes, changed)
         : await this.readFromArchive(codes, now, changed);
+    }
+    if (usCodes.length > 0) {
+      const usFailure = await this.readUs(usCodes, changed);
+      failure ??= usFailure;
     }
     await this.setFailure(failure);
     if (changed.length > 0) {
@@ -266,6 +273,26 @@ export class Monitor {
     return failure;
   }
 
+  /**
+   * US zones. Without a rated forecast (off season, "no rating"), the last
+   * bulletin is kept: it simply expires, and stays the reference of the
+   * triggers for the first rating of the season.
+   */
+  async readUs(codes, changed) {
+    let failure = null;
+    for (const code of codes) {
+      try {
+        const bulletin = await fetchUsForecast(this.fetch, zoneOf(code));
+        if (bulletin) {
+          await this.accept(code, bulletin, { url: null, pdfUrl: null }, changed);
+        }
+      } catch (err) {
+        failure ??= err;
+      }
+    }
+    return failure;
+  }
+
   /** Records a bulletin read for a massif, and fires the triggers of a new one. */
   async accept(code, bulletin, { url, pdfUrl }, changed) {
     const previous = this.entries[code]?.bulletin ?? null;
@@ -281,7 +308,7 @@ export class Monitor {
     if (!isNew) {
       return;
     }
-    logger.debug(`New bulletin for ${massifOf(code).name}: danger ${bulletin.riskMax}`);
+    logger.debug(`New bulletin for ${zoneOf(code).name}: danger ${bulletin.riskMax}`);
     if (previous && this.created().includes(code)) {
       await this.fireTriggers(code, previous, bulletin, pdfUrl);
     }
@@ -327,7 +354,7 @@ export class Monitor {
   }
 
   async setFailure(err) {
-    const kind = err ? (err.keyRefused ? 'key' : 'source') : null;
+    const kind = err ? (err.keyRefused ? 'key' : err.us ? 'us' : 'source') : null;
     if (kind !== this.failing) {
       if (kind) {
         // One line at the first failure, one at the recovery.
@@ -347,8 +374,11 @@ export class Monitor {
     if (this.statusPublished) {
       return;
     }
-    const message =
-      this.failing === 'key' ? STATUS.keyRefused : this.failing ? STATUS.sourceDown : undefined;
+    const message = {
+      key: STATUS.keyRefused,
+      us: STATUS.usDown,
+      source: STATUS.sourceDown,
+    }[this.failing];
     try {
       await this.gladys.setConnectionStatus(!this.failing, message);
       this.statusPublished = true;

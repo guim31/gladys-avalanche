@@ -1,0 +1,36 @@
+{
+ "id": 185523,
+ "published_time": "2026-10-23T23:43:00+00:00",
+ "expires_time": "2026-10-23T23:43:00+00:00",
+ "created_at": "2026-09-29T20:14:29+00:00",
+ "updated_at": "2026-10-23T23:49:49+00:00",
+ "author": null,
+ "product_type": "summary",
+ "bottom_line": null,
+ "hazard_discussion": "<h3 style=\"text-align: center;\">&nbsp;</h3>\n<figure class=\"image afp-photoswipe align-center\">\n<div class=\"afp-image-container\"><a title=\"KPAC movie and fundraiser night!\" href=\"https://orpheumflagstaff.com/\"><img style=\"width: 360px; height: 360px;\" src=\"https://prod-images.seetickets.us/eyJidWNrZXQiOiJwcm9kLXNpaC5zZWV0aWNrZXRzdXNhLnVzIiwia2V5IjoiMzRjMTllMTUtZTkxYS00NDMzLWE3M2YtNGIwMzIyMDZlMzY1IiwiZWRpdHMiOnt9fQ==\" alt=\"kpac movie and fundraiser night\"></a></div>\n</figure>\n<p style=\"text-align: center;\"><strong>Thank You, Flagstaff, Orpheum Theater, and TGR for Another Great Fall Fundraiser!</strong></p>\n<p style=\"text-align: center;\"><strong>KPAC's avalanche education courses are posted for the upcoming season.<br><a title=\"KPAC Courses\" href=\"https://kachinapeaks.org/courses\">kachinapeaks.org/courses</a></strong></p>\n<hr>\n<p>Expect avalanche forecasts to resume in early December, possibly sooner depending on conditions.&nbsp;&nbsp;</p>\n<p>Precipitation for Northern Arizona is expected to be above average through January. El Ni&ntilde;o continues to strengthen and will likely remain strong through winter into early spring.&nbsp;<br><a href=\"https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/lanina/enso_evolution-status-fcsts-web.pdf\" target=\"_blank\" rel=\"noopener\">https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/lanina/enso_evolution-status-fcsts-web.pdf</a></p>",
+ "weather_discussion": null,
+ "announcement": null,
+ "status": "published",
+ "media": [],
+ "weather_data": null,
+ "json_data": null,
+ "avalanche_center": {
+  "id": "KPAC",
+  "name": "Kachina Peaks Avalanche Center",
+  "url": "https://kachinapeaks.org/Forecast/#/san-francisco-peaks-%2F-kachina-peaks-wilderness",
+  "city": "Flagstaff",
+  "state": "AZ"
+ },
+ "forecast_avalanche_problems": [],
+ "danger": [],
+ "forecast_zone": [
+  {
+   "id": 2990,
+   "name": "San Francisco Peaks / Kachina Peaks Wilderness",
+   "url": "https://kachinapeaks.org/Forecast/#/san-francisco-peaks-%2F-kachina-peaks-wilderness",
+   "state": "AZ",
+   "zone_id": "san-fran-peaks",
+   "config": null
+  }
+ ]
+}

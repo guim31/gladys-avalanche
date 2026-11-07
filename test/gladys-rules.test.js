@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------------
 // Conformity with the Gladys core, on every device the integration can publish:
-// the 35 massifs, in every feature-name language.
+// the 35 massifs and every US zone, in every feature-name language.
 //
 // The table (test/fixtures/gladys-feature-table.json) is extracted from the
 // core code: a category/type couple missing there shows as "undefined" or
@@ -13,15 +13,16 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { MASSIFS } from '../src/massifs.js';
+import { US_ZONES } from '../src/us-zones.js';
 import { createWorld } from './helpers/world.js';
 
 const table = JSON.parse(
   await readFile(new URL('./fixtures/gladys-feature-table.json', import.meta.url), 'utf8'),
 );
 
-const ALL = MASSIFS.map((massif) => String(massif.code));
+const ALL = [...MASSIFS.map((massif) => String(massif.code)), ...US_ZONES.map((zone) => zone.code)];
 const scenarios = ['en', 'fr', 'de', 'es'].map((language) => ({
-  label: `every massif, ${language} names`,
+  label: `every massif and zone, ${language} names`,
   config: { massifs: ALL, language },
 }));
 
@@ -30,7 +31,7 @@ for (const scenario of scenarios) {
     const world = await createWorld({ config: scenario.config });
     try {
       const devices = world.fake.discoveredDevices;
-      assert.equal(devices.length, 35);
+      assert.equal(devices.length, MASSIFS.length + US_ZONES.length);
 
       for (const device of devices) {
         const where = device.name;

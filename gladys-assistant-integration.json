@@ -1,35 +1,35 @@
 {
   "manifest_version": 1,
   "type": "device",
-  "name": "Avalanche bulletins (BERA)",
+  "name": "Avalanche bulletins",
   "description": {
-    "en": "Météo-France avalanche danger (BERA) for the massifs of the Alps, Pyrenees and Corsica.",
-    "fr": "Risque d'avalanche de Météo-France (BERA) par massif : Alpes, Pyrénées et Corse.",
-    "de": "Lawinengefahr von Météo-France (BERA) für die Massive der Alpen, Pyrenäen und Korsikas.",
-    "es": "Riesgo de aludes de Météo-France (BERA) por macizo: Alpes, Pirineos y Córcega."
+    "en": "Avalanche danger by massif or zone: Météo-France (BERA) in France, avalanche centers in the US.",
+    "fr": "Risque d'avalanche par massif ou zone : Météo-France (BERA) en France, centres américains aux USA.",
+    "de": "Lawinengefahr pro Massiv oder Zone: Météo-France (BERA) in Frankreich, Lawinenzentren in den USA.",
+    "es": "Riesgo de aludes por macizo o zona: Météo-France (BERA) en Francia, centros de aludes en EE. UU."
   },
   "version": "1.0.0",
   "docker_image": "ghcr.io/guim31/gladys-avalanche:1.0.0",
   "gladys_version": ">=5.3.0",
   "cover_image": "https://raw.githubusercontent.com/guim31/gladys-avalanche/main/cover.png",
   "categories": ["environment", "leisure"],
-  "countries": ["FR"],
+  "countries": ["FR", "US"],
   "transports": ["cloud"],
   "config_schema": [
     {
       "key": "intro",
       "type": "section",
       "label": {
-        "en": "Your massifs",
-        "fr": "Vos massifs",
-        "de": "Deine Massive",
-        "es": "Sus macizos"
+        "en": "Your massifs and zones",
+        "fr": "Vos massifs et zones",
+        "de": "Deine Massive und Zonen",
+        "es": "Sus macizos y zonas"
       },
       "description": {
-        "en": "Choose the massifs to follow: one device per massif, with its avalanche danger level (1 to 5), the next-day trend, the most exposed aspects and the snow depth. Save, then create the devices in the Discover tab.",
-        "fr": "Choisissez les massifs à suivre : un appareil par massif, avec son niveau de risque d'avalanche (1 à 5), la tendance du lendemain, les pentes les plus exposées et l'enneigement. Enregistrez, puis créez les appareils dans l'onglet Découverte.",
-        "de": "Wähle die Massive aus, die du verfolgen willst: ein Gerät pro Massiv, mit Gefahrenstufe (1 bis 5), Tendenz für den Folgetag, gefährlichsten Expositionen und Schneehöhe. Speichere und lege dann die Geräte im Tab „Entdecken“ an.",
-        "es": "Elija los macizos que desea seguir: un dispositivo por macizo, con su nivel de riesgo de aludes (1 a 5), la tendencia del día siguiente, las orientaciones más expuestas y el espesor de nieve. Guarde y cree los dispositivos en la pestaña Descubrir."
+        "en": "Choose the massifs (France) or forecast zones (US) to follow: one device each, with its avalanche danger level (1 to 5), the next-day trend and the most exposed aspects, and the snow depth in France. Save, then create the devices in the Discover tab.",
+        "fr": "Choisissez les massifs (France) ou zones de prévision (USA) à suivre : un appareil chacun, avec son niveau de risque d'avalanche (1 à 5), la tendance du lendemain et les pentes les plus exposées , et l'enneigement en France. Enregistrez, puis créez les appareils dans l'onglet Découverte.",
+        "de": "Wähle die Massive (Frankreich) oder Vorhersagezonen (USA) aus: je ein Gerät, mit Gefahrenstufe (1 bis 5), Tendenz für den Folgetag und gefährlichsten Expositionen, in Frankreich auch die Schneehöhe. Speichere und lege dann die Geräte im Tab „Entdecken“ an.",
+        "es": "Elija los macizos (Francia) o zonas de previsión (EE. UU.): un dispositivo cada uno, con su nivel de riesgo de aludes (1 a 5), la tendencia del día siguiente y las orientaciones más expuestas, y el espesor de nieve en Francia. Guarde y cree los dispositivos en Descubrir."
       }
     },
     {
@@ -42,10 +42,10 @@
         "es": "Fuentes y límites"
       },
       "description": {
-        "en": "Bulletins © Météo-France (Licence Ouverte 2.0), read without an account, from early November to early June. A summary, not a safety tool: read the full bulletin before going out. Not affiliated with Météo-France.",
-        "fr": "Bulletins © Météo-France (Licence Ouverte 2.0), lus sans compte, de début novembre à début juin. Un résumé, pas un outil de sécurité : lisez le bulletin complet avant de partir. Non affiliée à Météo-France.",
-        "de": "Berichte © Météo-France (Licence Ouverte 2.0), ohne Konto gelesen, von Anfang November bis Anfang Juni. Eine Zusammenfassung, kein Sicherheitswerkzeug: Lies vor jeder Tour den ganzen Bericht. Nicht mit Météo-France verbunden.",
-        "es": "Boletines © Météo-France (Licence Ouverte 2.0), leídos sin cuenta, de principios de noviembre a principios de junio. Un resumen, no una herramienta de seguridad: lea el boletín completo antes de salir. Sin afiliación con Météo-France."
+        "en": "France: bulletins © Météo-France (Licence Ouverte 2.0), early November to early June. US: forecasts of the avalanche centers via avalanche.org, in season only. A summary, not a safety tool: read the full bulletin. Not affiliated with them.",
+        "fr": "France : bulletins © Météo-France (Licence Ouverte 2.0), de début novembre à début juin. USA : prévisions des centres d'avalanche via avalanche.org, en saison seulement. Un résumé, pas un outil de sécurité : lisez le bulletin complet. Non affiliée à eux.",
+        "de": "Frankreich: Berichte © Météo-France (Licence Ouverte 2.0), Anfang November bis Anfang Juni. USA: Vorhersagen der Lawinenzentren über avalanche.org, nur in der Saison. Eine Zusammenfassung, kein Sicherheitswerkzeug: Lies den ganzen Bericht. Nicht mit ihnen verbunden.",
+        "es": "Francia: boletines © Météo-France (Licence Ouverte 2.0), de principios de noviembre a principios de junio. EE. UU.: previsiones de los centros de aludes vía avalanche.org, solo en temporada. Un resumen, no una herramienta de seguridad: lea el boletín completo. Sin afiliación."
       },
       "links": [
         {
@@ -65,6 +65,15 @@
             "de": "Berichtsarchiv (data.gouv.fr)",
             "es": "Archivo de boletines (data.gouv.fr)"
           }
+        },
+        {
+          "url": "https://avalanche.org/",
+          "label": {
+            "en": "US avalanche centers (avalanche.org)",
+            "fr": "Centres d'avalanche des USA (avalanche.org)",
+            "de": "US-Lawinenzentren (avalanche.org)",
+            "es": "Centros de aludes de EE. UU. (avalanche.org)"
+          }
         }
       ]
     },
@@ -72,16 +81,16 @@
       "key": "massifs",
       "type": "multi_select",
       "label": {
-        "en": "Massifs",
-        "fr": "Massifs",
-        "de": "Massive",
-        "es": "Macizos"
+        "en": "Massifs and zones",
+        "fr": "Massifs et zones",
+        "de": "Massive und Zonen",
+        "es": "Macizos y zonas"
       },
       "description": {
-        "en": "One device per massif chosen.",
-        "fr": "Un appareil par massif choisi.",
-        "de": "Ein Gerät pro gewähltem Massiv.",
-        "es": "Un dispositivo por macizo elegido."
+        "en": "One device per massif or zone chosen. The US zones come after the French massifs, by state.",
+        "fr": "Un appareil par massif ou zone choisi. Les zones américaines suivent les massifs français, par État.",
+        "de": "Ein Gerät pro gewähltem Massiv oder gewählter Zone. Die US-Zonen folgen den französischen Massiven, nach Bundesstaat.",
+        "es": "Un dispositivo por macizo o zona elegido. Las zonas de EE. UU. siguen a los macizos franceses, por estado."
       },
       "required": false,
       "default": [],
@@ -400,6 +409,753 @@
             "de": "Cerdagne-Canigou (Pyrenäen)",
             "es": "Cerdagne-Canigou (Pirineos)"
           }
+        },
+        {
+          "value": "us-2165",
+          "label": {
+            "en": "Alaska · CAAC · Douglas Island",
+            "fr": "Alaska · CAAC · Douglas Island",
+            "de": "Alaska · CAAC · Douglas Island",
+            "es": "Alaska · CAAC · Douglas Island"
+          }
+        },
+        {
+          "value": "us-2164",
+          "label": {
+            "en": "Alaska · CAAC · Juneau",
+            "fr": "Alaska · CAAC · Juneau",
+            "de": "Alaska · CAAC · Juneau",
+            "es": "Alaska · CAAC · Juneau"
+          }
+        },
+        {
+          "value": "us-1421",
+          "label": {
+            "en": "Alaska · CAC · Cordova",
+            "fr": "Alaska · CAC · Cordova",
+            "de": "Alaska · CAC · Cordova",
+            "es": "Alaska · CAC · Cordova"
+          }
+        },
+        {
+          "value": "us-2818",
+          "label": {
+            "en": "Alaska · CNFAIC · Chugach State Park",
+            "fr": "Alaska · CNFAIC · Chugach State Park",
+            "de": "Alaska · CNFAIC · Chugach State Park",
+            "es": "Alaska · CNFAIC · Chugach State Park"
+          }
+        },
+        {
+          "value": "us-2817",
+          "label": {
+            "en": "Alaska · CNFAIC · Seward and Lost Lake",
+            "fr": "Alaska · CNFAIC · Seward and Lost Lake",
+            "de": "Alaska · CNFAIC · Seward and Lost Lake",
+            "es": "Alaska · CNFAIC · Seward and Lost Lake"
+          }
+        },
+        {
+          "value": "us-2816",
+          "label": {
+            "en": "Alaska · CNFAIC · Summit Lake",
+            "fr": "Alaska · CNFAIC · Summit Lake",
+            "de": "Alaska · CNFAIC · Summit Lake",
+            "es": "Alaska · CNFAIC · Summit Lake"
+          }
+        },
+        {
+          "value": "us-2815",
+          "label": {
+            "en": "Alaska · CNFAIC · Turnagain Pass and Girdwood",
+            "fr": "Alaska · CNFAIC · Turnagain Pass and Girdwood",
+            "de": "Alaska · CNFAIC · Turnagain Pass and Girdwood",
+            "es": "Alaska · CNFAIC · Turnagain Pass and Girdwood"
+          }
+        },
+        {
+          "value": "us-3002",
+          "label": {
+            "en": "Alaska · EARAC · Eastern Alaska Range North",
+            "fr": "Alaska · EARAC · Eastern Alaska Range North",
+            "de": "Alaska · EARAC · Eastern Alaska Range North",
+            "es": "Alaska · EARAC · Eastern Alaska Range North"
+          }
+        },
+        {
+          "value": "us-3003",
+          "label": {
+            "en": "Alaska · EARAC · Eastern Alaska Range South",
+            "fr": "Alaska · EARAC · Eastern Alaska Range South",
+            "de": "Alaska · EARAC · Eastern Alaska Range South",
+            "es": "Alaska · EARAC · Eastern Alaska Range South"
+          }
+        },
+        {
+          "value": "us-3007",
+          "label": {
+            "en": "Alaska · HAC · Chilkat Pass",
+            "fr": "Alaska · HAC · Chilkat Pass",
+            "de": "Alaska · HAC · Chilkat Pass",
+            "es": "Alaska · HAC · Chilkat Pass"
+          }
+        },
+        {
+          "value": "us-3005",
+          "label": {
+            "en": "Alaska · HAC · Lutak",
+            "fr": "Alaska · HAC · Lutak",
+            "de": "Alaska · HAC · Lutak",
+            "es": "Alaska · HAC · Lutak"
+          }
+        },
+        {
+          "value": "us-3006",
+          "label": {
+            "en": "Alaska · HAC · Transitional",
+            "fr": "Alaska · HAC · Transitional",
+            "de": "Alaska · HAC · Transitional",
+            "es": "Alaska · HAC · Transitional"
+          }
+        },
+        {
+          "value": "us-2152",
+          "label": {
+            "en": "Alaska · HPAC · Hatcher Pass",
+            "fr": "Alaska · HPAC · Hatcher Pass",
+            "de": "Alaska · HPAC · Hatcher Pass",
+            "es": "Alaska · HPAC · Hatcher Pass"
+          }
+        },
+        {
+          "value": "us-1611",
+          "label": {
+            "en": "Alaska · VAC · Continental",
+            "fr": "Alaska · VAC · Continental",
+            "de": "Alaska · VAC · Continental",
+            "es": "Alaska · VAC · Continental"
+          }
+        },
+        {
+          "value": "us-1610",
+          "label": {
+            "en": "Alaska · VAC · Intermountain",
+            "fr": "Alaska · VAC · Intermountain",
+            "de": "Alaska · VAC · Intermountain",
+            "es": "Alaska · VAC · Intermountain"
+          }
+        },
+        {
+          "value": "us-1609",
+          "label": {
+            "en": "Alaska · VAC · Maritime",
+            "fr": "Alaska · VAC · Maritime",
+            "de": "Alaska · VAC · Maritime",
+            "es": "Alaska · VAC · Maritime"
+          }
+        },
+        {
+          "value": "us-2990",
+          "label": {
+            "en": "Arizona · KPAC · San Francisco Peaks",
+            "fr": "Arizona · KPAC · San Francisco Peaks",
+            "de": "Arizona · KPAC · San Francisco Peaks",
+            "es": "Arizona · KPAC · San Francisco Peaks"
+          }
+        },
+        {
+          "value": "us-3004",
+          "label": {
+            "en": "California · BAC · Bridgeport Avalanche Center",
+            "fr": "Californie · BAC · Bridgeport Avalanche Center",
+            "de": "Kalifornien · BAC · Bridgeport Avalanche Center",
+            "es": "California · BAC · Bridgeport Avalanche Center"
+          }
+        },
+        {
+          "value": "us-128",
+          "label": {
+            "en": "California · ESAC · Eastside Region",
+            "fr": "Californie · ESAC · Eastside Region",
+            "de": "Kalifornien · ESAC · Eastside Region",
+            "es": "California · ESAC · Eastside Region"
+          }
+        },
+        {
+          "value": "us-1833",
+          "label": {
+            "en": "California · MSAC · Mount Shasta",
+            "fr": "Californie · MSAC · Mount Shasta",
+            "de": "Kalifornien · MSAC · Mount Shasta",
+            "es": "California · MSAC · Mount Shasta"
+          }
+        },
+        {
+          "value": "us-2458",
+          "label": {
+            "en": "California · SAC · Central Sierra Nevada",
+            "fr": "Californie · SAC · Central Sierra Nevada",
+            "de": "Kalifornien · SAC · Central Sierra Nevada",
+            "es": "California · SAC · Central Sierra Nevada"
+          }
+        },
+        {
+          "value": "us-3018",
+          "label": {
+            "en": "Idaho · IPAC · Selkirk Mountains",
+            "fr": "Idaho · IPAC · Selkirk Mountains",
+            "de": "Idaho · IPAC · Selkirk Mountains",
+            "es": "Idaho · IPAC · Selkirk Mountains"
+          }
+        },
+        {
+          "value": "us-1902",
+          "label": {
+            "en": "Idaho · IPAC · Silver Valley & Bitterroot Mountains",
+            "fr": "Idaho · IPAC · Silver Valley & Bitterroot Mountains",
+            "de": "Idaho · IPAC · Silver Valley & Bitterroot Mountains",
+            "es": "Idaho · IPAC · Silver Valley & Bitterroot Mountains"
+          }
+        },
+        {
+          "value": "us-1900",
+          "label": {
+            "en": "Idaho · IPAC · West Cabinet Mountains",
+            "fr": "Idaho · IPAC · West Cabinet Mountains",
+            "de": "Idaho · IPAC · West Cabinet Mountains",
+            "es": "Idaho · IPAC · West Cabinet Mountains"
+          }
+        },
+        {
+          "value": "us-3014",
+          "label": {
+            "en": "Idaho · PAC · Salmon River Mountains",
+            "fr": "Idaho · PAC · Salmon River Mountains",
+            "de": "Idaho · PAC · Salmon River Mountains",
+            "es": "Idaho · PAC · Salmon River Mountains"
+          }
+        },
+        {
+          "value": "us-3015",
+          "label": {
+            "en": "Idaho · PAC · West Mountains",
+            "fr": "Idaho · PAC · West Mountains",
+            "de": "Idaho · PAC · West Mountains",
+            "es": "Idaho · PAC · West Mountains"
+          }
+        },
+        {
+          "value": "us-2907",
+          "label": {
+            "en": "Idaho · SNFAC · Banner Summit",
+            "fr": "Idaho · SNFAC · Banner Summit",
+            "de": "Idaho · SNFAC · Banner Summit",
+            "es": "Idaho · SNFAC · Banner Summit"
+          }
+        },
+        {
+          "value": "us-2904",
+          "label": {
+            "en": "Idaho · SNFAC · Galena Summit & Eastern Mtns",
+            "fr": "Idaho · SNFAC · Galena Summit & Eastern Mtns",
+            "de": "Idaho · SNFAC · Galena Summit & Eastern Mtns",
+            "es": "Idaho · SNFAC · Galena Summit & Eastern Mtns"
+          }
+        },
+        {
+          "value": "us-2906",
+          "label": {
+            "en": "Idaho · SNFAC · Sawtooth & Western Smoky Mtns",
+            "fr": "Idaho · SNFAC · Sawtooth & Western Smoky Mtns",
+            "de": "Idaho · SNFAC · Sawtooth & Western Smoky Mtns",
+            "es": "Idaho · SNFAC · Sawtooth & Western Smoky Mtns"
+          }
+        },
+        {
+          "value": "us-2905",
+          "label": {
+            "en": "Idaho · SNFAC · Soldier & Wood River Valley Mtns",
+            "fr": "Idaho · SNFAC · Soldier & Wood River Valley Mtns",
+            "de": "Idaho · SNFAC · Soldier & Wood River Valley Mtns",
+            "es": "Idaho · SNFAC · Soldier & Wood River Valley Mtns"
+          }
+        },
+        {
+          "value": "us-3043",
+          "label": {
+            "en": "Montana · FAC · Flathead Range & Glacier NP",
+            "fr": "Montana · FAC · Flathead Range & Glacier NP",
+            "de": "Montana · FAC · Flathead Range & Glacier NP",
+            "es": "Montana · FAC · Flathead Range & Glacier NP"
+          }
+        },
+        {
+          "value": "us-3040",
+          "label": {
+            "en": "Montana · FAC · Northern Whitefish Range",
+            "fr": "Montana · FAC · Northern Whitefish Range",
+            "de": "Montana · FAC · Northern Whitefish Range",
+            "es": "Montana · FAC · Northern Whitefish Range"
+          }
+        },
+        {
+          "value": "us-3041",
+          "label": {
+            "en": "Montana · FAC · Southern Whitefish Range",
+            "fr": "Montana · FAC · Southern Whitefish Range",
+            "de": "Montana · FAC · Southern Whitefish Range",
+            "es": "Montana · FAC · Southern Whitefish Range"
+          }
+        },
+        {
+          "value": "us-3042",
+          "label": {
+            "en": "Montana · FAC · Swan Range",
+            "fr": "Montana · FAC · Swan Range",
+            "de": "Montana · FAC · Swan Range",
+            "es": "Montana · FAC · Swan Range"
+          }
+        },
+        {
+          "value": "us-2819",
+          "label": {
+            "en": "Montana · GNFAC · Bridger Range",
+            "fr": "Montana · GNFAC · Bridger Range",
+            "de": "Montana · GNFAC · Bridger Range",
+            "es": "Montana · GNFAC · Bridger Range"
+          }
+        },
+        {
+          "value": "us-2827",
+          "label": {
+            "en": "Montana · GNFAC · Cooke City",
+            "fr": "Montana · GNFAC · Cooke City",
+            "de": "Montana · GNFAC · Cooke City",
+            "es": "Montana · GNFAC · Cooke City"
+          }
+        },
+        {
+          "value": "us-2826",
+          "label": {
+            "en": "Montana · GNFAC · Island Park",
+            "fr": "Montana · GNFAC · Island Park",
+            "de": "Montana · GNFAC · Island Park",
+            "es": "Montana · GNFAC · Island Park"
+          }
+        },
+        {
+          "value": "us-2825",
+          "label": {
+            "en": "Montana · GNFAC · Lionhead Area",
+            "fr": "Montana · GNFAC · Lionhead Area",
+            "de": "Montana · GNFAC · Lionhead Area",
+            "es": "Montana · GNFAC · Lionhead Area"
+          }
+        },
+        {
+          "value": "us-2821",
+          "label": {
+            "en": "Montana · GNFAC · Northern Gallatin Range",
+            "fr": "Montana · GNFAC · Northern Gallatin Range",
+            "de": "Montana · GNFAC · Northern Gallatin Range",
+            "es": "Montana · GNFAC · Northern Gallatin Range"
+          }
+        },
+        {
+          "value": "us-2822",
+          "label": {
+            "en": "Montana · GNFAC · Northern Madison Range",
+            "fr": "Montana · GNFAC · Northern Madison Range",
+            "de": "Montana · GNFAC · Northern Madison Range",
+            "es": "Montana · GNFAC · Northern Madison Range"
+          }
+        },
+        {
+          "value": "us-2824",
+          "label": {
+            "en": "Montana · GNFAC · Southern Gallatin Range",
+            "fr": "Montana · GNFAC · Southern Gallatin Range",
+            "de": "Montana · GNFAC · Southern Gallatin Range",
+            "es": "Montana · GNFAC · Southern Gallatin Range"
+          }
+        },
+        {
+          "value": "us-2823",
+          "label": {
+            "en": "Montana · GNFAC · Southern Madison Range",
+            "fr": "Montana · GNFAC · Southern Madison Range",
+            "de": "Montana · GNFAC · Southern Madison Range",
+            "es": "Montana · GNFAC · Southern Madison Range"
+          }
+        },
+        {
+          "value": "us-1901",
+          "label": {
+            "en": "Montana · IPAC · East Cabinet Mountains",
+            "fr": "Montana · IPAC · East Cabinet Mountains",
+            "de": "Montana · IPAC · East Cabinet Mountains",
+            "es": "Montana · IPAC · East Cabinet Mountains"
+          }
+        },
+        {
+          "value": "us-3019",
+          "label": {
+            "en": "Montana · IPAC · Purcell Mountains",
+            "fr": "Montana · IPAC · Purcell Mountains",
+            "de": "Montana · IPAC · Purcell Mountains",
+            "es": "Montana · IPAC · Purcell Mountains"
+          }
+        },
+        {
+          "value": "us-1724",
+          "label": {
+            "en": "Montana · WCMAC · Bitterroot",
+            "fr": "Montana · WCMAC · Bitterroot",
+            "de": "Montana · WCMAC · Bitterroot",
+            "es": "Montana · WCMAC · Bitterroot"
+          }
+        },
+        {
+          "value": "us-1723",
+          "label": {
+            "en": "Montana · WCMAC · Rattlesnake",
+            "fr": "Montana · WCMAC · Rattlesnake",
+            "de": "Montana · WCMAC · Rattlesnake",
+            "es": "Montana · WCMAC · Rattlesnake"
+          }
+        },
+        {
+          "value": "us-1722",
+          "label": {
+            "en": "Montana · WCMAC · Seeley Lake",
+            "fr": "Montana · WCMAC · Seeley Lake",
+            "de": "Montana · WCMAC · Seeley Lake",
+            "es": "Montana · WCMAC · Seeley Lake"
+          }
+        },
+        {
+          "value": "us-2355",
+          "label": {
+            "en": "New Hampshire · MWAC · Presidential Range",
+            "fr": "New Hampshire · MWAC · Presidential Range",
+            "de": "New Hampshire · MWAC · Presidential Range",
+            "es": "New Hampshire · MWAC · Presidential Range"
+          }
+        },
+        {
+          "value": "us-490",
+          "label": {
+            "en": "New Mexico · TAC · Northern New Mexico",
+            "fr": "Nouveau-Mexique · TAC · Northern New Mexico",
+            "de": "New Mexico · TAC · Northern New Mexico",
+            "es": "Nuevo México · TAC · Northern New Mexico"
+          }
+        },
+        {
+          "value": "us-3017",
+          "label": {
+            "en": "New York · NYSAC · Adirondack Park",
+            "fr": "New York · NYSAC · Adirondack Park",
+            "de": "New York · NYSAC · Adirondack Park",
+            "es": "New York · NYSAC · Adirondack Park"
+          }
+        },
+        {
+          "value": "us-2470",
+          "label": {
+            "en": "Oregon · COAA · Central Cascades",
+            "fr": "Oregon · COAA · Central Cascades",
+            "de": "Oregon · COAA · Central Cascades",
+            "es": "Oregon · COAA · Central Cascades"
+          }
+        },
+        {
+          "value": "us-2471",
+          "label": {
+            "en": "Oregon · COAA · Newberry",
+            "fr": "Oregon · COAA · Newberry",
+            "de": "Oregon · COAA · Newberry",
+            "es": "Oregon · COAA · Newberry"
+          }
+        },
+        {
+          "value": "us-3032",
+          "label": {
+            "en": "Oregon · NWAC · Mt Hood",
+            "fr": "Oregon · NWAC · Mt Hood",
+            "de": "Oregon · NWAC · Mt Hood",
+            "es": "Oregon · NWAC · Mt Hood"
+          }
+        },
+        {
+          "value": "us-1369",
+          "label": {
+            "en": "Oregon · SOAIX · Southern Oregon",
+            "fr": "Oregon · SOAIX · Southern Oregon",
+            "de": "Oregon · SOAIX · Southern Oregon",
+            "es": "Oregon · SOAIX · Southern Oregon"
+          }
+        },
+        {
+          "value": "us-2985",
+          "label": {
+            "en": "Oregon · WAC · Blues",
+            "fr": "Oregon · WAC · Blues",
+            "de": "Oregon · WAC · Blues",
+            "es": "Oregon · WAC · Blues"
+          }
+        },
+        {
+          "value": "us-2984",
+          "label": {
+            "en": "Oregon · WAC · Elkhorns",
+            "fr": "Oregon · WAC · Elkhorns",
+            "de": "Oregon · WAC · Elkhorns",
+            "es": "Oregon · WAC · Elkhorns"
+          }
+        },
+        {
+          "value": "us-2982",
+          "label": {
+            "en": "Oregon · WAC · Northern Wallowas",
+            "fr": "Oregon · WAC · Northern Wallowas",
+            "de": "Oregon · WAC · Northern Wallowas",
+            "es": "Oregon · WAC · Northern Wallowas"
+          }
+        },
+        {
+          "value": "us-2983",
+          "label": {
+            "en": "Oregon · WAC · Southern Wallowas",
+            "fr": "Oregon · WAC · Southern Wallowas",
+            "de": "Oregon · WAC · Southern Wallowas",
+            "es": "Oregon · WAC · Southern Wallowas"
+          }
+        },
+        {
+          "value": "us-1744",
+          "label": {
+            "en": "Utah · UAC · Abajos",
+            "fr": "Utah · UAC · Abajos",
+            "de": "Utah · UAC · Abajos",
+            "es": "Utah · UAC · Abajos"
+          }
+        },
+        {
+          "value": "us-1736",
+          "label": {
+            "en": "Utah · UAC · Logan",
+            "fr": "Utah · UAC · Logan",
+            "de": "Utah · UAC · Logan",
+            "es": "Utah · UAC · Logan"
+          }
+        },
+        {
+          "value": "us-1742",
+          "label": {
+            "en": "Utah · UAC · Moab",
+            "fr": "Utah · UAC · Moab",
+            "de": "Utah · UAC · Moab",
+            "es": "Utah · UAC · Moab"
+          }
+        },
+        {
+          "value": "us-1737",
+          "label": {
+            "en": "Utah · UAC · Ogden",
+            "fr": "Utah · UAC · Ogden",
+            "de": "Utah · UAC · Ogden",
+            "es": "Utah · UAC · Ogden"
+          }
+        },
+        {
+          "value": "us-1739",
+          "label": {
+            "en": "Utah · UAC · Provo",
+            "fr": "Utah · UAC · Provo",
+            "de": "Utah · UAC · Provo",
+            "es": "Utah · UAC · Provo"
+          }
+        },
+        {
+          "value": "us-1738",
+          "label": {
+            "en": "Utah · UAC · Salt Lake",
+            "fr": "Utah · UAC · Salt Lake",
+            "de": "Utah · UAC · Salt Lake",
+            "es": "Utah · UAC · Salt Lake"
+          }
+        },
+        {
+          "value": "us-1741",
+          "label": {
+            "en": "Utah · UAC · Skyline",
+            "fr": "Utah · UAC · Skyline",
+            "de": "Utah · UAC · Skyline",
+            "es": "Utah · UAC · Skyline"
+          }
+        },
+        {
+          "value": "us-1743",
+          "label": {
+            "en": "Utah · UAC · Southwest",
+            "fr": "Utah · UAC · Southwest",
+            "de": "Utah · UAC · Southwest",
+            "es": "Utah · UAC · Southwest"
+          }
+        },
+        {
+          "value": "us-1740",
+          "label": {
+            "en": "Utah · UAC · Uintas",
+            "fr": "Utah · UAC · Uintas",
+            "de": "Utah · UAC · Uintas",
+            "es": "Utah · UAC · Uintas"
+          }
+        },
+        {
+          "value": "us-3030",
+          "label": {
+            "en": "Washington · NWAC · East Slopes Central",
+            "fr": "Washington · NWAC · East Slopes Central",
+            "de": "Washington · NWAC · East Slopes Central",
+            "es": "Washington · NWAC · East Slopes Central"
+          }
+        },
+        {
+          "value": "us-3029",
+          "label": {
+            "en": "Washington · NWAC · East Slopes North",
+            "fr": "Washington · NWAC · East Slopes North",
+            "de": "Washington · NWAC · East Slopes North",
+            "es": "Washington · NWAC · East Slopes North"
+          }
+        },
+        {
+          "value": "us-3031",
+          "label": {
+            "en": "Washington · NWAC · East Slopes South",
+            "fr": "Washington · NWAC · East Slopes South",
+            "de": "Washington · NWAC · East Slopes South",
+            "es": "Washington · NWAC · East Slopes South"
+          }
+        },
+        {
+          "value": "us-3020",
+          "label": {
+            "en": "Washington · NWAC · Olympics",
+            "fr": "Washington · NWAC · Olympics",
+            "de": "Washington · NWAC · Olympics",
+            "es": "Washington · NWAC · Olympics"
+          }
+        },
+        {
+          "value": "us-3028",
+          "label": {
+            "en": "Washington · NWAC · Snoqualmie Pass",
+            "fr": "Washington · NWAC · Snoqualmie Pass",
+            "de": "Washington · NWAC · Snoqualmie Pass",
+            "es": "Washington · NWAC · Snoqualmie Pass"
+          }
+        },
+        {
+          "value": "us-3024",
+          "label": {
+            "en": "Washington · NWAC · Stevens Pass",
+            "fr": "Washington · NWAC · Stevens Pass",
+            "de": "Washington · NWAC · Stevens Pass",
+            "es": "Washington · NWAC · Stevens Pass"
+          }
+        },
+        {
+          "value": "us-3022",
+          "label": {
+            "en": "Washington · NWAC · West Slopes Central",
+            "fr": "Washington · NWAC · West Slopes Central",
+            "de": "Washington · NWAC · West Slopes Central",
+            "es": "Washington · NWAC · West Slopes Central"
+          }
+        },
+        {
+          "value": "us-3021",
+          "label": {
+            "en": "Washington · NWAC · West Slopes North",
+            "fr": "Washington · NWAC · West Slopes North",
+            "de": "Washington · NWAC · West Slopes North",
+            "es": "Washington · NWAC · West Slopes North"
+          }
+        },
+        {
+          "value": "us-3023",
+          "label": {
+            "en": "Washington · NWAC · West Slopes South",
+            "fr": "Washington · NWAC · West Slopes South",
+            "de": "Washington · NWAC · West Slopes South",
+            "es": "Washington · NWAC · West Slopes South"
+          }
+        },
+        {
+          "value": "us-2856",
+          "label": {
+            "en": "Wyoming · BTAC · Salt River and Wyoming Ranges",
+            "fr": "Wyoming · BTAC · Salt River and Wyoming Ranges",
+            "de": "Wyoming · BTAC · Salt River and Wyoming Ranges",
+            "es": "Wyoming · BTAC · Salt River and Wyoming Ranges"
+          }
+        },
+        {
+          "value": "us-2860",
+          "label": {
+            "en": "Wyoming · BTAC · Snake River Range",
+            "fr": "Wyoming · BTAC · Snake River Range",
+            "de": "Wyoming · BTAC · Snake River Range",
+            "es": "Wyoming · BTAC · Snake River Range"
+          }
+        },
+        {
+          "value": "us-2855",
+          "label": {
+            "en": "Wyoming · BTAC · Tetons",
+            "fr": "Wyoming · BTAC · Tetons",
+            "de": "Wyoming · BTAC · Tetons",
+            "es": "Wyoming · BTAC · Tetons"
+          }
+        },
+        {
+          "value": "us-2852",
+          "label": {
+            "en": "Wyoming · BTAC · Togwotee Pass",
+            "fr": "Wyoming · BTAC · Togwotee Pass",
+            "de": "Wyoming · BTAC · Togwotee Pass",
+            "es": "Wyoming · BTAC · Togwotee Pass"
+          }
+        },
+        {
+          "value": "us-2841",
+          "label": {
+            "en": "Wyoming · EWYAIX · Big Horns",
+            "fr": "Wyoming · EWYAIX · Big Horns",
+            "de": "Wyoming · EWYAIX · Big Horns",
+            "es": "Wyoming · EWYAIX · Big Horns"
+          }
+        },
+        {
+          "value": "us-2843",
+          "label": {
+            "en": "Wyoming · EWYAIX · Sierra Madre",
+            "fr": "Wyoming · EWYAIX · Sierra Madre",
+            "de": "Wyoming · EWYAIX · Sierra Madre",
+            "es": "Wyoming · EWYAIX · Sierra Madre"
+          }
+        },
+        {
+          "value": "us-2842",
+          "label": {
+            "en": "Wyoming · EWYAIX · Snowy Range",
+            "fr": "Wyoming · EWYAIX · Snowy Range",
+            "de": "Wyoming · EWYAIX · Snowy Range",
+            "es": "Wyoming · EWYAIX · Snowy Range"
+          }
         }
       ]
     },
@@ -487,10 +1243,10 @@
         "es": "El riesgo de aludes alcanza un nivel"
       },
       "description": {
-        "en": "A new bulletin raises the danger of a massif to the chosen level or above (once, when the level is crossed upwards).",
-        "fr": "Un nouveau bulletin porte le risque d'un massif au niveau choisi ou au-delà (une fois, quand le niveau est franchi à la hausse).",
-        "de": "Ein neuer Bericht hebt die Gefahr eines Massivs auf die gewählte Stufe oder höher (einmal, beim Überschreiten nach oben).",
-        "es": "Un nuevo boletín eleva el riesgo de un macizo al nivel elegido o más (una vez, cuando el nivel se supera al alza)."
+        "en": "A new bulletin raises the danger of a massif or zone to the chosen level or above (once, when the level is crossed upwards).",
+        "fr": "Un nouveau bulletin porte le risque d'un massif ou d'une zone au niveau choisi ou au-delà (une fois, quand le niveau est franchi à la hausse).",
+        "de": "Ein neuer Bericht hebt die Gefahr eines Massivs oder einer Zone auf die gewählte Stufe oder höher (einmal, beim Überschreiten nach oben).",
+        "es": "Un nuevo boletín eleva el riesgo de un macizo o una zona al nivel elegido o más (una vez, cuando el nivel se supera al alza)."
       },
       "fields": [
         {
@@ -499,10 +1255,10 @@
           "source": "devices",
           "required": false,
           "label": {
-            "en": "Massif",
-            "fr": "Massif",
-            "de": "Massiv",
-            "es": "Macizo"
+            "en": "Massif or zone",
+            "fr": "Massif ou zone",
+            "de": "Massiv oder Zone",
+            "es": "Macizo o zona"
           }
         },
         {
@@ -560,10 +1316,10 @@
           "key": "massif_name",
           "type": "string",
           "label": {
-            "en": "Massif",
-            "fr": "Massif",
-            "de": "Massiv",
-            "es": "Macizo"
+            "en": "Massif or zone",
+            "fr": "Massif ou zone",
+            "de": "Massiv oder Zone",
+            "es": "Macizo o zona"
           }
         },
         {
@@ -607,10 +1363,10 @@
         "es": "Nuevo boletín de aludes"
       },
       "description": {
-        "en": "Météo-France issues a new bulletin for a massif (usually around 4 pm, for the next day).",
-        "fr": "Météo-France émet un nouveau bulletin pour un massif (en général vers 16 h, pour le lendemain).",
-        "de": "Météo-France gibt einen neuen Bericht für ein Massiv heraus (meist gegen 16 Uhr, für den Folgetag).",
-        "es": "Météo-France emite un nuevo boletín para un macizo (por lo general hacia las 16 h, para el día siguiente)."
+        "en": "A new bulletin for a massif or zone: Météo-France usually around 4 pm for the next day, US centers in the morning.",
+        "fr": "Un nouveau bulletin pour un massif ou une zone : Météo-France en général vers 16 h pour le lendemain, les centres américains le matin.",
+        "de": "Ein neuer Bericht für ein Massiv oder eine Zone: Météo-France meist gegen 16 Uhr für den Folgetag, die US-Zentren morgens.",
+        "es": "Un nuevo boletín para un macizo o una zona: Météo-France por lo general hacia las 16 h para el día siguiente, los centros de EE. UU. por la mañana."
       },
       "fields": [
         {
@@ -619,10 +1375,10 @@
           "source": "devices",
           "required": false,
           "label": {
-            "en": "Massif",
-            "fr": "Massif",
-            "de": "Massiv",
-            "es": "Macizo"
+            "en": "Massif or zone",
+            "fr": "Massif ou zone",
+            "de": "Massiv oder Zone",
+            "es": "Macizo o zona"
           }
         }
       ],
@@ -631,10 +1387,10 @@
           "key": "massif_name",
           "type": "string",
           "label": {
-            "en": "Massif",
-            "fr": "Massif",
-            "de": "Massiv",
-            "es": "Macizo"
+            "en": "Massif or zone",
+            "fr": "Massif ou zone",
+            "de": "Massiv oder Zone",
+            "es": "Macizo o zona"
           }
         },
         {
@@ -681,10 +1437,10 @@
           "key": "summary",
           "type": "string",
           "label": {
-            "en": "Summary (in French)",
-            "fr": "Résumé",
-            "de": "Zusammenfassung (auf Französisch)",
-            "es": "Resumen (en francés)"
+            "en": "Summary (French or English)",
+            "fr": "Résumé (en français ou en anglais)",
+            "de": "Zusammenfassung (Französisch oder Englisch)",
+            "es": "Resumen (en francés o en inglés)"
           }
         },
         {
@@ -723,16 +1479,16 @@
           "source": "devices",
           "required": false,
           "label": {
-            "en": "Massif",
-            "fr": "Massif",
-            "de": "Massiv",
-            "es": "Macizo"
+            "en": "Massif or zone",
+            "fr": "Massif ou zone",
+            "de": "Massiv oder Zone",
+            "es": "Macizo o zona"
           },
           "description": {
-            "en": "Leave empty to list every massif (10 at most); pick one for its details.",
-            "fr": "Laissez vide pour lister tous les massifs (10 au plus) ; choisissez-en un pour son détail.",
-            "de": "Leer lassen, um alle Massive aufzulisten (höchstens 10); wähle eines für seine Details.",
-            "es": "Déjelo vacío para listar todos los macizos (10 como máximo); elija uno para ver su detalle."
+            "en": "Leave empty to list every massif or zone (10 at most); pick one for its details.",
+            "fr": "Laissez vide pour lister tous les massifs et zones (10 au plus) ; choisissez-en un pour son détail.",
+            "de": "Leer lassen, um alle Massive und Zonen aufzulisten (höchstens 10); wähle eines für seine Details.",
+            "es": "Déjelo vacío para listar todos los macizos y zonas (10 como máximo); elija uno para ver su detalle."
           }
         },
         {
@@ -751,10 +1507,10 @@
           "type": "boolean",
           "default": true,
           "label": {
-            "en": "Show the button to the PDF",
-            "fr": "Afficher le bouton vers le PDF",
-            "de": "Schaltfläche zum PDF zeigen",
-            "es": "Mostrar el botón hacia el PDF"
+            "en": "Show the button to the full bulletin",
+            "fr": "Afficher le bouton vers le bulletin complet",
+            "de": "Schaltfläche zum ganzen Bericht zeigen",
+            "es": "Mostrar el botón hacia el boletín completo"
           }
         }
       ]

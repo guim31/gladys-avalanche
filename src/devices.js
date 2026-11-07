@@ -18,6 +18,11 @@
 //     top altitude of the bulletin's table (2000 or 2500 m, see massifs.js);
 //   - in_force: input/binary, 1 while a bulletin covers now (0 off season).
 //
+// A US forecast zone (avalanche.org, see us-zones.js) is a device of its own
+// type, `us_zone`, its zone id as the platform id: only the features its
+// center publishes (risk_max, risk_tomorrow, aspects, issued_at, valid_until,
+// in_force). The massif devices are unchanged.
+//
 // Published with should_poll: false: the refresh runs in the container
 // (src/monitor.js). The massif number is the platform id.
 // -----------------------------------------------------------------------------
@@ -28,11 +33,13 @@ import {
   DEVICE_FEATURE_UNITS as UNITS,
 } from '@gladysassistant/integration-sdk';
 import { snowAt } from './bra.js';
-import { massifOf } from './massifs.js';
+import { isUsZone, massifOf, zoneOf } from './massifs.js';
+import { CENTERS, US_PREFIX } from './us-zones.js';
 import { aspectsText } from './messages.js';
 import { formatDateTime } from './time.js';
 
 export const DEVICE_TYPE = 'massif';
+export const US_DEVICE_TYPE = 'us_zone';
 export const FEATURE_KEYS = [
   'risk_max',
   'risk_tomorrow',
@@ -44,6 +51,15 @@ export const FEATURE_KEYS = [
   'valid_until',
   'snow_north',
   'snow_south',
+  'in_force',
+];
+
+export const US_FEATURE_KEYS = [
+  'risk_max',
+  'risk_tomorrow',
+  'aspects',
+  'issued_at',
+  'valid_until',
   'in_force',
 ];
 
@@ -108,19 +124,30 @@ const LEVEL_FEATURES = ['risk_max', 'risk_tomorrow', 'risk_below', 'risk_above']
 const MAX_ALTITUDE_M = 5000;
 const MAX_SNOW_CM = 1000;
 
-/** External ids of a massif device and of its features. */
+/** External ids of a massif (or US zone) device and of its features. */
 export function massifIds(gladys, code) {
-  const ids = gladys.externalIds(DEVICE_TYPE, String(code));
+  const zone = zoneOf(code);
+  const ids = isUsZone(zone)
+    ? gladys.externalIds(US_DEVICE_TYPE, String(zone.id))
+    : gladys.externalIds(DEVICE_TYPE, String(code));
   return {
     device: ids.device,
     ...Object.fromEntries(FEATURE_KEYS.map((key) => [key, ids.feature(key)])),
   };
 }
 
-/** The massif code of a device or feature external id (null if not ours). */
+/** The massif (or US zone) code of a device or feature external id (null if not ours). */
 export function codeOfExternalId(gladys, externalId) {
+  if (typeof externalId !== 'string') {
+    return null;
+  }
+  const usPrefix = gladys.externalIds(US_DEVICE_TYPE, '').device;
+  if (externalId.startsWith(usPrefix)) {
+    const zone = zoneOf(`${US_PREFIX}${externalId.slice(usPrefix.length).split(':')[0]}`);
+    return zone ? zone.code : null;
+  }
   const prefix = gladys.externalIds(DEVICE_TYPE, '').device;
-  if (typeof externalId !== 'string' || !externalId.startsWith(prefix)) {
+  if (!externalId.startsWith(prefix)) {
     return null;
   }
   const massif = massifOf(externalId.slice(prefix.length).split(':')[0]);
@@ -192,8 +219,23 @@ function feature(key, ids, language, massif) {
   };
 }
 
-/** The discovery payload of a massif. */
+/** The discovery payload of a massif or of a US zone. */
 export function buildDevice(gladys, code, language = 'fr') {
+  const zone = zoneOf(code);
+  if (isUsZone(zone)) {
+    const ids = massifIds(gladys, zone.code);
+    return {
+      name: zone.name,
+      external_id: ids.device,
+      model: CENTERS[zone.center],
+      should_poll: false,
+      params: [
+        { name: 'US_CENTER', value: zone.center },
+        { name: 'US_ZONE_ID', value: String(zone.id) },
+      ],
+      features: US_FEATURE_KEYS.map((key) => feature(key, ids, language, zone)),
+    };
+  }
   const massif = massifOf(code);
   const ids = massifIds(gladys, massif.code);
   return {
@@ -240,7 +282,8 @@ export function deviceStates(gladys, code, bulletin, now, language) {
   addText('aspects', aspectsText(bulletin.aspects, language));
   addText('issued_at', formatDateTime(bulletin.issuedAt, language));
   addText('valid_until', formatDateTime(bulletin.validUntil, language));
-  const snow = snowAt(bulletin, massifOf(code).snowAltitude);
+  const massif = massifOf(code);
+  const snow = massif ? snowAt(bulletin, massif.snowAltitude) : null;
   add('snow_north', snow?.north);
   add('snow_south', snow?.south);
   return states;
