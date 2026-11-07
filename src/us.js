@@ -66,6 +66,9 @@ const highest = (bands) => {
   return levels.length > 0 ? Math.max(...levels) : null;
 };
 
+// An out-of-range entity ("&#99999999;") is dropped rather than thrown.
+const codePoint = (n) => (n > 0 && n <= 0x10ffff ? String.fromCodePoint(n) : '');
+
 /** Plain text of the HTML the centers write ("<p>The most dangerous…</p>"). */
 export function plainText(html) {
   if (typeof html !== 'string') {
@@ -78,6 +81,8 @@ export function plainText(html) {
     .replace(/&mdash;/g, '—')
     .replace(/&rsquo;|&#39;|&apos;/g, '’')
     .replace(/&quot;/g, '"')
+    .replace(/&#(\d+);/g, (_, n) => codePoint(Number(n)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, n) => codePoint(parseInt(n, 16)))
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&amp;/g, '&')

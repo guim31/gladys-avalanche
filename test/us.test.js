@@ -132,6 +132,8 @@ test('no rating, summaries, off season and unknown zones give no bulletin', asyn
   product.danger = [{ lower: -1, middle: 0, upper: -1, valid_day: 'current' }];
   assert.equal(parseUsForecast(product, zone), null);
   assert.equal(plainText('<p>A&nbsp;b &amp; c&ndash;d</p>'), 'A b & c–d');
+  assert.equal(plainText('<p>It&#8217;s &#x27;steep&#x27;</p>'), "It’s 'steep'");
+  assert.equal(plainText('a&#99999999;b'), 'ab');
 });
 
 test('publishes a rated zone, and only in_force for a zone without rating', async () => {
