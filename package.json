@@ -1,6 +1,6 @@
 {
   "name": "gladys-avalanche",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Météo-France avalanche bulletins (BERA) for Gladys Assistant: danger level per massif, triggers and widget.",
   "type": "module",
